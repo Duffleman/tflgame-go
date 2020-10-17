@@ -9,10 +9,6 @@ CREATE TABLE events (
     created_at timestamp without time zone NOT NULL
 );
 
-CREATE UNIQUE INDEX events_pkey ON events (id text_ops);
-
-CREATE UNIQUE INDEX events_serial_key ON events (serial int4_ops);
-
 CREATE INDEX events_user_id_idx ON events (user_id text_ops);
 
 CREATE INDEX events_game_id_idx ON events (game_id text_ops);
@@ -21,15 +17,14 @@ CREATE INDEX events_game_id_idx ON events (game_id text_ops);
 /* users */
 CREATE TABLE proj_users (
     id text PRIMARY KEY,
-    tag text NOT NULL,
+    handle text NOT NULL,
     numeric text NOT NULL,
     pin text,
-    score integer NOT NULL DEFAULT 0
+    score integer NOT NULL DEFAULT 0,
+    created_at timestamp without time zone NOT NULL
 );
 
-CREATE UNIQUE INDEX proj_users_pkey ON proj_users (id text_ops);
-
-CREATE UNIQUE INDEX proj_users_tag_numeric_idx ON proj_users (tag text_ops, numeric text_ops);
+CREATE UNIQUE INDEX proj_users_handle_numeric_idx ON proj_users (handle text_ops, numeric text_ops);
 
 
 /* games */
@@ -42,8 +37,6 @@ CREATE TABLE proj_games (
     created_at timestamp without time zone NOT NULL,
     finished_at timestamp without time zone
 );
-
-CREATE UNIQUE INDEX proj_games_pkey ON proj_games (id text_ops);
 
 CREATE INDEX proj_games_user_id_idx ON proj_games (user_id text_ops);
 
@@ -59,8 +52,6 @@ CREATE TABLE proj_prompts (
     created_at timestamp without time zone NOT NULL,
     answered_at timestamp without time zone
 );
-
-CREATE UNIQUE INDEX proj_prompts_pkey ON proj_prompts (id text_ops);
 
 CREATE INDEX proj_prompts_user_id_idx ON proj_prompts (user_id text_ops);
 

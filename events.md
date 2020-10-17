@@ -4,6 +4,7 @@
 
 ```json
 {
+	"user_id": "user_000000C0MOMLVpVxWLULYZphFtGeG",
 	"creation_id": "game_000000C0HbJWhvF4jnfFcEulxhsaH",
 	"difficulty_options": {
 		"rounds": 5,
@@ -49,7 +50,7 @@
 ```json
 {
 	"creation_id": "user_000000C0HjBIFIIxIKLTiSVviqtpE",
-	"tag": "DFL",
+	"handle": "DFL",
 	"numeric": "001",
 	"pin": "<hash>"
 }
@@ -59,11 +60,9 @@
 
 ```json
 {
-	"current_tag": "DFL",
-	"current_numeric": "001",
+	"user_id": "user_000000C0HjBIFIIxIKLTiSVviqtpE",
 	"new_tag": "GEM",
-	"new_numeric": "001",
-	"pin": "<hash>"
+	"new_numeric": "001"
 }
 ```
 

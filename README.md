@@ -4,6 +4,15 @@ This is the backend service that runs the TFLGame. A game where you are provided
 
 Any case where response is not defined in this document, you will get a 204 status code, it completed the requested action.
 
+## Auth
+
+To generate the EC256 keys needed for JWT signing, use the following two commands.
+
+```bash
+openssl ecparam -genkey -name prime256v1 -noout -out ec_private.pem
+openssl ec -in ec_private.pem -pubout -out ec_public.pem
+```
+
 ## Entities
 
 ### User tag
@@ -28,14 +37,13 @@ This option will mean that when you're given prompts, you're also told how long 
 
 ## API
 
-### `change_user_tag`
+### `create_user`
 
-#### Request
+#### Request
 
 ```json
 {
-	"currrent_user_tag": "DFL#001",
-	"new_user_tag": "GEM",
+	"handle": "DFL",
 	"pin": "014410"
 }
 ```
@@ -44,7 +52,54 @@ This option will mean that when you're given prompts, you're also told how long 
 
 ```json
 {
-	"user_tag": "GEM#001"
+	"id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"handle": "DFL",
+	"numeric": "001",
+	"token": "eyj..."
+}
+```
+
+### `authenticate`
+
+#### Request
+
+```json
+{
+	"handle": "DFL",
+	"numeric": "001",
+	"pin": "014410"
+}
+```
+
+#### Response
+
+```json
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"token": "eyj..."
+}
+```
+
+Although the `token` may look like a JWT... you should treat it as a string and not try to decode it... please. We don't guarentee it'll always be a JWT and want to change it in the background without updating clients.
+
+### `change_handle`
+
+#### Request
+
+```json
+{
+	"id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"new_handle": "GEM"
+}
+```
+
+#### Response
+
+```json
+{
+	"id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"handle": "GEM",
+	"numeric": "323"
 }
 ```
 
@@ -52,8 +107,8 @@ This option will mean that when you're given prompts, you're also told how long 
 
 ```json
 {
-	"user_tag": "DFL#001",
-	"pin": "014410"
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"handle": "DFL"
 }
 ```
 
@@ -63,8 +118,7 @@ This option will mean that when you're given prompts, you're also told how long 
 
 ```json
 {
-	"user_tag": "DFL#0001",
-	"pin": null,
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
 	"difficulty_options": {
 		"rounds": 5,
 		"include_random_spaces": true, // WHITECHAPEL => WH TCH PL
@@ -197,7 +251,8 @@ Rounds must be no less than 5, no more than 30.
 ```json
 [
 	{
-		"tag": "DFL#001",
+		"handle": "DFL",
+		"numeric": "001",
 		"game_in_progress": false,
 		"score": 52,
 		"level": {
@@ -214,7 +269,8 @@ Rounds must be no less than 5, no more than 30.
 
 ```json
 {
-	"user_tag": "DFL#001",
+	"handle": "DFL",
+	"numeric": "001",
 	"limit": 10
 }
 ```

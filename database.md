@@ -74,7 +74,7 @@ This document lays out the database information for the game and it's format
 			<td>primary key</td>
 		</tr>
 		<tr>
-			<td>tag</td>
+			<td>handle</td>
 			<td>text</td>
 			<td>false</td>
 			<td></td>
@@ -94,6 +94,12 @@ This document lays out the database information for the game and it's format
 		<tr>
 			<td>score</td>
 			<td>int</td>
+			<td>false</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>created_at</td>
+			<td>datetime</td>
 			<td>false</td>
 			<td></td>
 		</tr>
