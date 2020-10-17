@@ -30,7 +30,7 @@ CREATE UNIQUE INDEX proj_users_handle_numeric_idx ON proj_users (handle text_ops
 /* games */
 CREATE TABLE proj_games (
     id text PRIMARY KEY,
-    user_id text NOT NULL REFERENCES proj_users (id),
+    user_id text REFERENCES proj_users (id),
     difficulty_options jsonb NOT NULL,
     game_options jsonb NOT NULL,
     score integer NOT NULL DEFAULT 0,

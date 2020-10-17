@@ -13,7 +13,7 @@ func HandleError(w http.ResponseWriter, e error) {
 
 	if v, ok := e.(cher.E); ok {
 		switch v.Code {
-		case cher.NotFound:
+		case cher.NotFound, cher.RouteNotFound:
 			w.WriteHeader(404)
 		default:
 			w.WriteHeader(500)
