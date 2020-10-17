@@ -88,7 +88,7 @@ This document lays out the database information for the game and it's format
 		<tr>
 			<td>pin</td>
 			<td>text</td>
-			<td>false</td>
+			<td>true</td>
 			<td>hashed</td>
 		</tr>
 		<tr>
@@ -125,7 +125,7 @@ This document lays out the database information for the game and it's format
 		<tr>
 			<td>user_id</td>
 			<td>text</td>
-			<td>true</td>
+			<td>false</td>
 			<td>foreign key to <code>proj_users</code></td>
 		</tr>
 		<tr>

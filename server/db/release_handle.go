@@ -37,10 +37,9 @@ func (d *DB) ReleaseHandle(ctx context.Context, userID string) error {
 			return err
 		}
 
-		// TODO(gm): this won't work when games are attached
-		// will need to release all games first
 		_, err = qw.q.ExecContext(ctx, `
-			DELETE FROM proj_users
+			UPDATE proj_users
+			SET pin = null
 			WHERE id = $1
 		`, userID)
 

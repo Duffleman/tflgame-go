@@ -105,9 +105,23 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 ### `release_handle`
 
+#### Request
+
 ```json
 {
 	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN"
+}
+```
+
+### `change_pin`
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"current_pin": "014410",
+	"new_pin": "111111"
 }
 ```
 

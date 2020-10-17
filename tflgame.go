@@ -50,3 +50,9 @@ type ChangeHandleRequest struct {
 type ReleaseHandleRequest struct {
 	UserID string `json:"user_id"`
 }
+
+type ChangePinRequest struct {
+	UserID     string `json:"user_id"`
+	CurrentPin string `json:"current_pin"`
+	NewPin     string `json:"new_pin"`
+}
