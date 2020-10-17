@@ -66,13 +66,12 @@
 }
 ```
 
-## `change_user_pin`
+## `change_pin`
 
 ```json
 {
-	"handle": "DFL",
-	"numeric": "001",
-	"new_pin": "<hash>"
+	"user_id": "user_000000C0HjBIFIIxIKLTiSVviqtpE",
+	"pin": "<hash>"
 }
 ```
 
