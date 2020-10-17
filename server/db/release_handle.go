@@ -31,7 +31,7 @@ func (d *DB) ReleaseHandle(ctx context.Context, userID string) error {
 				(id, type, user_id, game_id, payload, created_at)
 				VALUES($1, $2, $3, $4, $5, $6)
 			`,
-			eventID, "release_handle", userID, nil, payloadBytes, time.Now(),
+			eventID, "release_handle", userID, nil, payloadBytes, time.Now().Format(time.RFC3339),
 		)
 		if err != nil {
 			return err

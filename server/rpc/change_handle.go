@@ -15,12 +15,12 @@ var ChangeHandleSchema = gojsonschema.NewStringLoader(`{
 	"additionalProperties": false,
 
 	"required": [
-		"id",
+		"user_id",
 		"new_handle"
 	],
 
 	"properties": {
-		"id": {
+		"user_id": {
 			"type": "string",
 			"minLength": 1
 		},

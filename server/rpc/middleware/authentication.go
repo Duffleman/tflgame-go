@@ -17,7 +17,7 @@ func Authenticate(next http.HandlerFunc, publicKey *ecdsa.PublicKey) http.Handle
 		tokenString := req.Header.Get("Authorization")
 
 		if tokenString == "" {
-			httperr.HandleError(res, cher.New(cher.Unauthorized, nil))
+			httperr.HandleError(res, cher.New(cher.Unauthorized, nil, cher.New("missing_header", nil)))
 			return
 		}
 

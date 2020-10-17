@@ -25,7 +25,7 @@ func (d *DB) ChangePin(ctx context.Context, userID string, hash []byte) error {
 				(id, type, user_id, game_id, payload, created_at)
 				VALUES($1, $2, $3, $4, $5, $6)
 			`,
-			eventID, "change_pin", userID, nil, payloadBytes, time.Now(),
+			eventID, "change_pin", userID, nil, payloadBytes, time.Now().Format(time.RFC3339),
 		)
 		if err != nil {
 			return err

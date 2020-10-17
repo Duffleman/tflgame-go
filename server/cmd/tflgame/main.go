@@ -49,6 +49,7 @@ func main() {
 	r.Route("/change_handle", r.ChangeHandle, rpc.ChangeHandleSchema, rpc.JWTAuth)
 	r.Route("/release_handle", r.ReleaseHandle, rpc.ReleaseHandleSchema, rpc.JWTAuth)
 	r.Route("/change_pin", r.ChangePin, rpc.ChangePinSchema, rpc.JWTAuth)
+	r.Route("/list_events", r.ListEvents, rpc.ListEventsSchema, rpc.JWTAuth)
 
 	addr := config.GetEnv("addr").(string)
 	r.Serve(addr)

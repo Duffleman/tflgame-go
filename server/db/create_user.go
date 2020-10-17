@@ -26,7 +26,7 @@ func (d *DB) CreateUser(ctx context.Context, handle, hash string) (*tflgame.Publ
 
 		eventID := ksuid.Generate("event").String()
 		userID := ksuid.Generate("user").String()
-		now := time.Now()
+		now := time.Now().Format(time.RFC3339)
 
 		payloadBytes, err := json.Marshal(map[string]interface{}{
 			"creation_id": userID,
