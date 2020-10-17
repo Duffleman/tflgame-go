@@ -88,7 +88,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 ```json
 {
-	"id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
 	"new_handle": "GEM"
 }
 ```
@@ -97,18 +97,17 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 ```json
 {
-	"id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
 	"handle": "GEM",
 	"numeric": "323"
 }
 ```
 
-### `release_user_tag`
+### `release_handle`
 
 ```json
 {
-	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
-	"handle": "DFL"
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN"
 }
 ```
 

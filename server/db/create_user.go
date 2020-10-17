@@ -57,7 +57,7 @@ func (d *DB) CreateUser(ctx context.Context, handle, hash string) (*tflgame.Publ
 
 		user.Handle = handle
 		user.Numeric = numeric
-		user.ID = userID
+		user.UserID = userID
 
 		return err
 	})

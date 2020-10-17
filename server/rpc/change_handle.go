@@ -36,7 +36,7 @@ var ChangeHandleSchema = gojsonschema.NewStringLoader(`{
 func (r *RPC) ChangeHandle(ctx context.Context, req *tflgame.ChangeHandleRequest) (*tflgame.PublicUser, error) {
 	userID := ctx.Value(middleware.TFLGameUser).(string)
 
-	if req.ID != userID {
+	if req.UserID != userID {
 		return nil, cher.New(cher.Unauthorized, nil)
 	}
 

@@ -14,7 +14,7 @@ type User struct {
 }
 
 type PublicUser struct {
-	ID      string `json:"id"`
+	UserID  string `json:"user_id"`
 	Handle  string `json:"handle"`
 	Numeric string `json:"numeric"`
 }
@@ -43,6 +43,10 @@ type AuthenticateResponse struct {
 }
 
 type ChangeHandleRequest struct {
-	ID        string `json:"id"`
+	UserID    string `json:"user_id"`
 	NewHandle string `json:"new_handle"`
+}
+
+type ReleaseHandleRequest struct {
+	ID string `json:"id"`
 }

@@ -25,13 +25,13 @@ func (a *App) CreateUser(ctx context.Context, req *tflgame.CreateUserRequest) (*
 		return nil, err
 	}
 
-	token, err := a.GenerateJWT(ctx, user.ID)
+	token, err := a.GenerateJWT(ctx, user.UserID)
 	if err != nil {
 		return nil, err
 	}
 
 	return &tflgame.CreateUserResponse{
-		ID:      user.ID,
+		ID:      user.UserID,
 		Handle:  user.Handle,
 		Numeric: user.Numeric,
 		Token:   token,
