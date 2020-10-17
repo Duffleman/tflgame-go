@@ -46,7 +46,8 @@ func main() {
 
 	r.Route("/authenticate", r.Authenticate, rpc.AuthenticateSchema, rpc.UnsafeNoAuth)
 	r.Route("/create_user", r.CreateUser, rpc.CreateUserSchema, rpc.UnsafeNoAuth)
-	r.Route("/change_handle", r.ChangeHandle, rpc.ChangeHandleSchema, rpc.JWT)
+	r.Route("/change_handle", r.ChangeHandle, rpc.ChangeHandleSchema, rpc.JWTAuth)
+	r.Route("/release_handle", r.ReleaseHandle, rpc.ReleaseHandleSchema, rpc.JWTAuth)
 
 	addr := config.GetEnv("addr").(string)
 	r.Serve(addr)
