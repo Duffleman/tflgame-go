@@ -43,6 +43,11 @@ func (a *App) SyncTFLData(ctx context.Context) error {
 				return err
 			}
 
+			err = a.db.TFLInsertStopsZones(gctx, stops)
+			if err != nil {
+				return err
+			}
+
 			err = a.db.TFLInsertLineStops(gctx, stops)
 			if err != nil {
 				return err

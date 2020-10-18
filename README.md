@@ -37,9 +37,9 @@ This option will mean that when you're given prompts, you're also told how long 
 
 ## API
 
-### `create_user`
+### `create_user`
 
-#### Request
+#### Request
 
 ```json
 {
@@ -59,9 +59,9 @@ This option will mean that when you're given prompts, you're also told how long 
 }
 ```
 
-### `authenticate`
+### `authenticate`
 
-#### Request
+#### Request
 
 ```json
 {
@@ -125,7 +125,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 }
 ```
 
-### `list_events`
+### `list_events`
 
 #### Request
 
@@ -170,34 +170,52 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 ]
 ```
 
-### `create_game`
+### `test_game_options`
 
 #### Request
 
 ```json
 {
-	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
-	"difficulty_options": {
-		"rounds": 5,
-		"include_random_spaces": true, // WHITECHAPEL => WH TCH PL
-		"change_letter_order": true, // WHITECHAPEL => PLWTHHC
-		"reveal_word_length": false, // OVAL =>VL (4)
-	},
-	"game_options": {
-		"lines": [
-			"district",
-			"bakerloo",
-			"circle"
-		],
-		"bus_stops": false,
-		"overground": true
-	}
+	"modes": [
+		"tube",
+		"overground",
+		"dlr"
+	],
+	"lines": [
+		"district",
+		"hammersmith-city",
+		"london-overground",
+		"dlr"
+	]
 }
 ```
 
-If the user tag is not protected, `pin` must be present but can be `null`. Otherwise it is a `string`.
+#### Response
 
-Rounds must be no less than 5, no more than 30.
+```json
+{
+	"possible_prompts": 41
+}
+```
+
+### `create_game`
+
+#### Request
+
+```js
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"difficulty_options": {
+		"rounds": 5,
+		"include_random_spaces": true,
+		"change_letter_order": true,
+		"reveal_word_length": false,
+	},
+	"game_options": {
+		// TBD
+	}
+}
+```
 
 #### Response
 

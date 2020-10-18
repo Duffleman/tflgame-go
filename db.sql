@@ -88,6 +88,15 @@ CREATE TABLE tfl_stops (
 );
 
 
+/* tfl_stops_zones */
+CREATE TABLE tfl_stops_zones (
+    stop_id text NOT NULL REFERENCES tfl_stops (id),
+    zone text NOT NULL
+);
+
+CREATE UNIQUE INDEX tfl_stops_zones_stop_id_zone_idx ON tfl_stops_zones (stop_id text_ops, zone text_ops);
+
+
 /* tfl_lines_stops */
 CREATE TABLE tfl_lines_stops (
     line_id text NOT NULL REFERENCES tfl_lines (id),

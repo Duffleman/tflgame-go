@@ -22,15 +22,23 @@ type Line struct {
 }
 
 type Stop struct {
-	ID             string          `json:"id"`
-	Status         bool            `json:"status"`
-	Name           string          `json:"commonName"`
-	Modes          []string        `json:"modes"`
-	ICSCode        string          `json:"icsCode"`
-	StationNaptan  string          `json:"stationNaptan"`
-	LineModeGroups []LineModeGroup `json:"lineModeGroups"`
-	Lat            float64         `json:"lat"`
-	Lon            float64         `json:"lon"`
+	ID                   string               `json:"id"`
+	Status               bool                 `json:"status"`
+	Name                 string               `json:"commonName"`
+	Modes                []string             `json:"modes"`
+	ICSCode              string               `json:"icsCode"`
+	StationNaptan        string               `json:"stationNaptan"`
+	LineModeGroups       []LineModeGroup      `json:"lineModeGroups"`
+	Lat                  float64              `json:"lat"`
+	Lon                  float64              `json:"lon"`
+	AdditionalProperties []AdditionalProperty `json:"additionalProperties"`
+}
+
+type AdditionalProperty struct {
+	Category        string `json:"category"`
+	Key             string `json:"key"`
+	SourceSystemKey string `json:"sourceSystemKey"`
+	Value           string `json:"value"`
 }
 
 type LineModeGroup struct {

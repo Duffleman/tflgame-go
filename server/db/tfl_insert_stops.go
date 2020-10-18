@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"strings"
 
 	"tflgame/server/lib/tfl"
 )
@@ -10,19 +9,7 @@ import (
 func (d *DB) TFLInsertStops(ctx context.Context, stops []*tfl.Stop) error {
 	return d.DoTx(ctx, func(qw *QueryableWrapper) error {
 		for _, stop := range stops {
-			shortName := stop.Name
-
-			if strings.HasSuffix(shortName, " Underground Station") {
-				shortName = strings.TrimSuffix(shortName, " Underground Station")
-			}
-
-			if strings.HasSuffix(shortName, " Rail Station") {
-				shortName = strings.TrimSuffix(shortName, " Rail Station")
-			}
-
-			if strings.HasSuffix(shortName, " DLR Station") {
-				shortName = strings.TrimSuffix(shortName, " DLR Station")
-			}
+			shortName := tfl.GetStationShortname(stop.Name)
 
 			_, err := qw.q.ExecContext(ctx, `
 			INSERT INTO tfl_stops
