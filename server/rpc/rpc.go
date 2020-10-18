@@ -17,22 +17,25 @@ import (
 
 const (
 	UnsafeNoAuth AuthType = iota
+	InternalOnlyAuth
 	JWTAuth
 )
 
 type AuthType int
 
 type RPC struct {
-	app    *app.App
-	router *chi.Mux
-	Logger *logrus.Logger
+	app         *app.App
+	router      *chi.Mux
+	internalKey string
+	Logger      *logrus.Logger
 }
 
-func New(app *app.App, l *logrus.Logger) *RPC {
+func New(app *app.App, l *logrus.Logger, internalKey string) *RPC {
 	r := &RPC{
-		app:    app,
-		Logger: l,
-		router: chi.NewRouter(),
+		app:         app,
+		Logger:      l,
+		internalKey: internalKey,
+		router:      chi.NewRouter(),
 	}
 
 	r.SetMuxBase()
@@ -65,8 +68,10 @@ func (r *RPC) Route(pattern string, fnR interface{}, schema gojsonschema.JSONLoa
 
 	switch authRequirement {
 	case UnsafeNoAuth:
+	case InternalOnlyAuth:
+		handler = middleware.AuthenticateInternalKey(handler, r.internalKey)
 	case JWTAuth:
-		handler = middleware.Authenticate(handler, r.app.SigningKeys.GetPublicKey())
+		handler = middleware.AuthenticateJWT(handler, r.app.SigningKeys.GetPublicKey())
 	}
 
 	r.router.Post(pattern, handler)

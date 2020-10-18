@@ -56,3 +56,43 @@ CREATE TABLE proj_prompts (
 CREATE INDEX proj_prompts_user_id_idx ON proj_prompts (user_id text_ops);
 
 CREATE INDEX proj_prompts_game_id_idx ON proj_prompts (game_id text_ops);
+
+
+/* tfl_modes */
+CREATE TABLE tfl_modes (
+    id text PRIMARY KEY,
+    name text NOT NULL
+);
+
+
+/* tfl_lines */
+CREATE TABLE tfl_lines (
+    id text PRIMARY KEY,
+    name text NOT NULL,
+    mode_name text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    modified_at timestamp without time zone NOT NULL
+);
+
+
+/* tfl_stops */
+CREATE TABLE tfl_stops (
+    id text PRIMARY KEY,
+    name text NOT NULL,
+    short_name text NOT NULL,
+    ics_code text NOT NULL,
+    station_naptan text NOT NULL,
+    status boolean NOT NULL,
+    lat double precision NOT NULL,
+    lon double precision NOT NULL
+);
+
+
+/* tfl_lines_stops */
+CREATE TABLE tfl_lines_stops (
+    line_id text NOT NULL REFERENCES tfl_lines (id),
+    stop_id text NOT NULL REFERENCES tfl_stops (id),
+    mode text NOT NULL
+);
+
+CREATE UNIQUE INDEX tfl_lines_stops_line_id_stop_id_idx ON tfl_lines_stops (line_id text_ops, stop_id text_ops);
