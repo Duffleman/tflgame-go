@@ -18,8 +18,11 @@
 			"bakerloo",
 			"circle"
 		],
-		"bus_stops": false,
-		"overground": true
+		"zones": [
+			"1",
+			"2",
+			"5"
+		]
 	}
 }
 ```

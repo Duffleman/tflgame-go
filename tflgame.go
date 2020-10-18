@@ -88,3 +88,30 @@ type LineDisplay struct {
 	Name  string  `json:"name"`
 	Color *string `json:"color"`
 }
+
+type CreateGameRequest struct {
+	UserID            string            `json:"user_id"`
+	DifficultyOptions DifficultyOptions `json:"difficulty_options"`
+	GameOptions       GameOptions       `json:"game_options"`
+}
+
+type DifficultyOptions struct {
+	Rounds              int  `json:"rounds"`
+	IncludeRandomSpaces bool `json:"include_random_spaces"`
+	ChangeLetterOrder   bool `json:"change_letter_order"`
+	RevealWordLength    bool `json:"reveal_word_length"`
+}
+
+type CreateGameResponse struct {
+	ID       string `json:"id"`
+	PromptID string `json:"prompt_id"`
+	Prompt   string `json:"prompt"`
+	Length   *int   `json:"length"`
+}
+
+type Prompt struct {
+	ID     string
+	Prompt string
+	Answer string
+	Length *int
+}

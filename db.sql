@@ -31,8 +31,12 @@ CREATE UNIQUE INDEX proj_users_handle_numeric_idx ON proj_users (handle text_ops
 CREATE TABLE proj_games (
     id text PRIMARY KEY,
     user_id text NOT NULL REFERENCES proj_users (id),
-    difficulty_options jsonb NOT NULL,
-    game_options jsonb NOT NULL,
+    rounds int NOT NULL,
+    include_random_spaces boolean NOT NULL,
+    change_letter_order boolean NOT NULL,
+    reveal_word_length boolean NOT NULL,
+    lines jsonb,
+    zones jsonb,
     score integer NOT NULL DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     finished_at timestamp without time zone

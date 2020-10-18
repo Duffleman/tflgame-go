@@ -39,6 +39,14 @@ type ReleaseHandlePayload struct {
 	Numeric string `json:"numeric"`
 }
 
+type CreateGamePayload struct {
+	CreationID        string   `json:"creation_id"`
+	UserID            string   `json:"user_id"`
+	Prompts           []Prompt `json:"prompts"`
+	DifficultyOptions DifficultyOptions
+	GameOptions       GameOptions
+}
+
 func PayloadHandler(eventType string, raw []byte, in *interface{}) error {
 	switch eventType {
 	case "create_user":
@@ -64,6 +72,13 @@ func PayloadHandler(eventType string, raw []byte, in *interface{}) error {
 		*in = payload
 	case "release_handle":
 		var payload ReleaseHandlePayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
+	case "create_game":
+		var payload CreateGamePayload
 		if err := json.Unmarshal(raw, &payload); err != nil {
 			return err
 		}

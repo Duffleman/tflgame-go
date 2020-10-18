@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"tflgame/server/lib/cher"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // HandleError will handle returning errors to the writer for you
@@ -21,6 +23,8 @@ func HandleError(w http.ResponseWriter, e error) {
 		json.NewEncoder(w).Encode(v)
 		return
 	}
+
+	log.WithError(e).Warn("unknown")
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"code": "unknown",

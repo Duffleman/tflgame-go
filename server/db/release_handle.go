@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"time"
 
+	"tflgame"
+
 	ksuid "github.com/cuvva/ksuid-go"
 )
 
@@ -17,10 +19,10 @@ func (d *DB) ReleaseHandle(ctx context.Context, userID string) error {
 
 		eventID := ksuid.Generate("event").String()
 
-		payloadBytes, err := json.Marshal(map[string]interface{}{
-			"user_id": userID,
-			"handle":  user.Handle,
-			"numeric": user.Numeric,
+		payloadBytes, err := json.Marshal(tflgame.ReleaseHandlePayload{
+			UserID:  userID,
+			Handle:  user.Handle,
+			Numeric: user.Numeric,
 		})
 		if err != nil {
 			return err

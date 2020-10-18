@@ -9,13 +9,14 @@ import (
 	ksuid "github.com/cuvva/ksuid-go"
 )
 
-func (d *DB) CreateUser(ctx context.Context, handle, hash string) (*tflgame.PublicUser, error) {
+func (d *DB) CreateUser(ctx context.Context, handle string, hash []byte) (*tflgame.PublicUser, error) {
 	user := &tflgame.PublicUser{}
 
-	var insertHash *string = nil
+	var insertHash *string
 
-	if hash != "" {
-		insertHash = &hash
+	if len(hash) > 0 {
+		ih := string(hash)
+		insertHash = &ih
 	}
 
 	err := d.DoTx(ctx, func(qw *QueryableWrapper) error {
@@ -28,11 +29,11 @@ func (d *DB) CreateUser(ctx context.Context, handle, hash string) (*tflgame.Publ
 		userID := ksuid.Generate("user").String()
 		now := time.Now().Format(time.RFC3339)
 
-		payloadBytes, err := json.Marshal(map[string]interface{}{
-			"creation_id": userID,
-			"handle":      handle,
-			"numeric":     numeric,
-			"pin":         insertHash,
+		payloadBytes, err := json.Marshal(tflgame.CreateUserPayload{
+			CreationID: userID,
+			Handle:     handle,
+			Numeric:    numeric,
+			Pin:        insertHash,
 		})
 		if err != nil {
 			return err

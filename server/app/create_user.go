@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"time"
 
 	"tflgame"
 
@@ -20,12 +21,20 @@ func (a *App) CreateUser(ctx context.Context, req *tflgame.CreateUserRequest) (*
 		hash = bhash
 	}
 
-	user, err := a.db.CreateUser(ctx, req.Handle, string(hash))
+	user, err := a.db.CreateUser(ctx, req.Handle, hash)
 	if err != nil {
 		return nil, err
 	}
 
-	token, err := a.GenerateJWT(ctx, user.UserID)
+	var jwtExpiry time.Duration
+
+	if req.Pin == nil {
+		jwtExpiry = 24 * time.Hour // 1 day
+	} else {
+		jwtExpiry = 8766 * time.Hour // 1 year
+	}
+
+	token, err := a.GenerateJWT(ctx, user.UserID, jwtExpiry)
 	if err != nil {
 		return nil, err
 	}

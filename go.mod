@@ -7,6 +7,7 @@ require (
 	github.com/cuvva/ksuid-go v0.0.0-20190704133525-91309d40e0f0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-chi/chi v4.1.2+incompatible
+	github.com/go-errors/errors v1.1.1
 	github.com/kr/pretty v0.2.1
 	github.com/lib/pq v1.8.0
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect

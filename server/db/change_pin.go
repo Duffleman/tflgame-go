@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"time"
 
+	"tflgame"
+
 	ksuid "github.com/cuvva/ksuid-go"
 )
 
@@ -12,9 +14,9 @@ func (d *DB) ChangePin(ctx context.Context, userID string, hash []byte) error {
 	return d.DoTx(ctx, func(qw *QueryableWrapper) error {
 		eventID := ksuid.Generate("event").String()
 
-		payloadBytes, err := json.Marshal(map[string]interface{}{
-			"user_id": userID,
-			"pin":     hash,
+		payloadBytes, err := json.Marshal(tflgame.ChangePinPayload{
+			UserID: userID,
+			Pin:    string(hash),
 		})
 		if err != nil {
 			return err

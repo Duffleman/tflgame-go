@@ -10,10 +10,21 @@ import (
 
 func (qw *QueryableWrapper) ListEvents(ctx context.Context, req *tflgame.ListEventsRequest) ([]*tflgame.Event, error) {
 	q := NewQueryBuilder().
-		Select("id", "type", "user_id", "game_id", "payload", "created_at").
+		Select("e.id", "e.type", "e.user_id", "e.game_id", "e.payload", "e.created_at").
 		From("events e").
+		LeftJoin("proj_games g ON e.game_id = g.id").
 		Where(sq.Eq{
-			"user_id": req.UserID,
+			"e.user_id": req.UserID,
+		}).
+		// only finished games appear in the timeline
+		Where(sq.Or{
+			sq.NotEq{
+				"g.id":          nil,
+				"g.finished_at": nil,
+			},
+			sq.Eq{
+				"g.id": nil,
+			},
 		})
 
 	p, err := NewPagination(req.Pagination)

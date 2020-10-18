@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"time"
 
 	"tflgame"
 )
@@ -17,7 +18,7 @@ func (a *App) Authenticate(ctx context.Context, req *tflgame.AuthenticateRequest
 		return nil, err
 	}
 
-	token, err := a.GenerateJWT(ctx, user.ID)
+	token, err := a.GenerateJWT(ctx, user.ID, 8766*time.Hour)
 	if err != nil {
 		return nil, err
 	}

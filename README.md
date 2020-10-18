@@ -212,7 +212,17 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 		"reveal_word_length": false,
 	},
 	"game_options": {
-		// TBD
+		"lines": [
+			"district",
+			"waterloo-city",
+			...more
+		],
+		"zones": [
+			"1",
+			"4",
+			"6",
+			...more
+		]
 	}
 }
 ```
@@ -222,6 +232,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 ```json
 {
 	"id": "game_000000C0HbJWhvF4jnfFcEulxhsaG",
+	"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tr",
 	"prompt": "W HTC HP L",
 	"length": 11
 }
@@ -235,7 +246,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 ```json
 {
-	"id": "game_000000C0HbJWhvF4jnfFcEulxhsaG",
+	"prompt_id": "prompt_000000C0HbJWhvF4jnfFcEulxhsaG",
 	"answer": "whitechapel"
 }
 ```
@@ -244,7 +255,8 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 ```json
 {
-	"id": "game_000000C0HbJWhvF4jnfFcEulxhsaG",
+	"correct": true,
+	"prompt_id": "prompt_000000C0HbJWhvF4jnfFcEulxhsaG",
 	"prompt": "BR KNG"
 }
 ```
