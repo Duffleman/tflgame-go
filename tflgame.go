@@ -70,11 +70,21 @@ type ChangePinRequest struct {
 }
 
 type GameOptions struct {
-	Modes []string `json:"modes"`
 	Lines []string `json:"lines"`
 	Zones []string `json:"zones"`
 }
 
 type TestGameOptionsResponse struct {
 	PossiblePrompts int `json:"possible_prompts"`
+}
+
+type GetGameOptionsResponse struct {
+	Lines map[string][]LineDisplay `json:"lines"`
+	Zones []string                 `json:"zones"`
+}
+
+type LineDisplay struct {
+	ID    string  `json:"id"`
+	Name  string  `json:"name"`
+	Color *string `json:"color"`
 }

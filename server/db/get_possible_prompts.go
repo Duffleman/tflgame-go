@@ -9,19 +9,25 @@ import (
 )
 
 func (qw *QueryableWrapper) GetPossiblePrompts(ctx context.Context, options *tflgame.GameOptions) ([]string, error) {
-	query, values, err := NewQueryBuilder().
+	qb := NewQueryBuilder().
 		Select("DISTINCT(s.short_name)").
 		From("tfl_stops s").
-		Join("tfl_stops_zones zs on s.id = zs.stop_id").
+		LeftJoin("tfl_stops_zones zs on s.id = zs.stop_id").
 		Join("tfl_lines_stops ls ON s.id = ls.stop_id").
 		Join("tfl_lines l ON ls.line_id = l.id").
 		Where(sq.Eq{
-			"l.id":    options.Lines,
-			"ls.mode": options.Modes,
+			"l.id": options.Lines,
+		})
+
+	if options.Zones != nil {
+		qb = qb.Where(sq.Eq{
 			"zs.zone": options.Zones,
-		}).
-		OrderBy("s.short_name ASC").
-		ToSql()
+		})
+	}
+
+	qb = qb.OrderBy("s.short_name ASC")
+
+	query, values, err := qb.ToSql()
 	if err != nil {
 		return nil, err
 	}

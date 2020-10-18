@@ -13,20 +13,11 @@ var TestGameOptionsSchema = gojsonschema.NewStringLoader(`{
 	"additionalProperties": false,
 
 	"required": [
-		"modes",
 		"lines",
 		"zones"
 	],
 
 	"properties": {
-		"modes": {
-			"type": "array",
-			"items": {
-				"type": "string",
-				"minLength": 1
-			}
-		},
-
 		"lines": {
 			"type": "array",
 			"items": {
@@ -36,7 +27,7 @@ var TestGameOptionsSchema = gojsonschema.NewStringLoader(`{
 		},
 
 		"zones": {
-			"type": "array",
+			"type": ["null", "array"],
 			"items": {
 				"type": "string",
 				"minLength": 1

@@ -2,10 +2,12 @@ package db
 
 import (
 	"context"
-	"strings"
+	"regexp"
 
 	"tflgame/server/lib/tfl"
 )
+
+var splitter = regexp.MustCompile(`[+/]`)
 
 func (d *DB) TFLInsertStopsZones(ctx context.Context, stops []*tfl.Stop) error {
 	return d.DoTx(ctx, func(qw *QueryableWrapper) error {
@@ -23,7 +25,7 @@ func (d *DB) TFLInsertStopsZones(ctx context.Context, stops []*tfl.Stop) error {
 				return nil
 			}
 
-			zones := strings.Split(zp.Value, "+")
+			zones := splitter.Split(zp.Value, -1)
 
 			for _, zone := range zones {
 				_, err := qw.q.ExecContext(ctx, `

@@ -176,11 +176,6 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 ```json
 {
-	"modes": [
-		"tube",
-		"overground",
-		"dlr"
-	],
 	"lines": [
 		"district",
 		"hammersmith-city",
@@ -295,34 +290,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 #### Response
 
 ```json
-{
-	"lines": [
-		{
-			"name": "bakerloo",
-			"color": "#00adD2d"
-		},
-		{
-			"name": "district",
-			"color": "#00adD2d"
-		},
-		{
-			"name": "circle",
-			"color": "#00adD2d"
-		}
-	],
-	"options": [
-		{
-			"key": "bus_stops",
-			"type": "boolean",
-			"description": "Should we include bus stops?"
-		},
-		{
-			"key": "overground",
-			"type": "boolean",
-			"description": "Should we include the London overground?"
-		}
-	]
-}
+
 ```
 
 ### `list_leaderboard`

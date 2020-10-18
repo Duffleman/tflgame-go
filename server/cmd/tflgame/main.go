@@ -62,6 +62,7 @@ func main() {
 
 	// game endpoints
 	r.Route("/test_game_options", r.TestGameOptions, rpc.TestGameOptionsSchema, rpc.UnsafeNoAuth)
+	r.Route("/get_game_options", r.GetGameOptions, nil, rpc.UnsafeNoAuth)
 
 	addr := config.GetEnv("addr").(string)
 	r.Serve(addr)
