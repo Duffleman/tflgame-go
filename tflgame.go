@@ -19,6 +19,18 @@ type PublicUser struct {
 	Numeric string `json:"numeric"`
 }
 
+type ListEventsRequest struct {
+	UserID     string      `json:"user_id"`
+	Pagination *Pagination `json:"pagination"`
+}
+
+type Pagination struct {
+	Before *string `json:"before"`
+	After  *string `json:"after"`
+	Order  string  `json:"order"`
+	Limit  int     `json:"limit"`
+}
+
 type CreateUserRequest struct {
 	Handle string  `json:"handle"`
 	Pin    *string `json:"pin"`
@@ -48,5 +60,11 @@ type ChangeHandleRequest struct {
 }
 
 type ReleaseHandleRequest struct {
-	ID string `json:"id"`
+	UserID string `json:"user_id"`
+}
+
+type ChangePinRequest struct {
+	UserID     string `json:"user_id"`
+	CurrentPin string `json:"current_pin"`
+	NewPin     string `json:"new_pin"`
 }

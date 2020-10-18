@@ -56,31 +56,31 @@
 }
 ```
 
-## `change_user_tag`
+## `change_handle`
 
 ```json
 {
 	"user_id": "user_000000C0HjBIFIIxIKLTiSVviqtpE",
-	"new_tag": "GEM",
+	"new_handle": "GEM",
 	"new_numeric": "001"
 }
 ```
 
-## `change_user_pin`
+## `change_pin`
 
 ```json
 {
-	"tag": "DFL",
-	"numeric": "001",
-	"new_pin": "<hash>"
+	"user_id": "user_000000C0HjBIFIIxIKLTiSVviqtpE",
+	"pin": "<hash>"
 }
 ```
 
-## `release_user_tag`
+## `release_handle`
 
 ```json
 {
-	"tag": "DFL",
+	"user_id": "user_000000C0HjBIFIIxIKLTiSVviqtpE",
+	"handle": "DFL",
 	"numeric": "001"
 }
 ```

@@ -33,7 +33,7 @@ func comparePasswords(hashedPwd, plainPwd string) (bool, error) {
 
 	err := bcrypt.CompareHashAndPassword(byteHash, bytePlain)
 	if err != nil {
-		return false, err
+		return false, cher.New(cher.Unauthorized, nil, cher.New("bad_pin", nil))
 	}
 
 	return true, nil

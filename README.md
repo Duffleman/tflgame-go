@@ -105,10 +105,69 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 ### `release_handle`
 
+#### Request
+
 ```json
 {
 	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN"
 }
+```
+
+### `change_pin`
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"current_pin": "014410",
+	"new_pin": "111111"
+}
+```
+
+### `list_events`
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"pagination": {
+		"before": null,
+		"after": "event_000000C0PogVwB5cpZgpzndpiBp4Y",
+		"order": "oldest_first",
+		"limit": 50
+	}
+}
+```
+
+#### Response
+
+```json
+[
+	{
+		"id": "event_000000C0PLcdyYdxIBi9tOUYjAldI",
+		"type": "create_user",
+		"user_id": "user_000000C0PLcdyYdxIBi9tOUYjAldJ",
+		"game_id": null,
+		"payload": {
+			"creation_id": "user_000000C0PLcdyYdxIBi9tOUYjAldJ",
+			"handle": "DFL",
+			"numeric": "001"
+		},
+		"created_at": "2020-10-17T14:18:29.383619Z"
+	},
+	{
+		"id": "event_000000C0PMw6WdMpoiEl8ZV2SzO3E",
+		"type": "change_pin",
+		"user_id": "user_000000C0PLcdyYdxIBi9tOUYjAldJ",
+		"game_id": null,
+		"payload": {
+			"user_id": "user_000000C0PLcdyYdxIBi9tOUYjAldJ"
+		},
+		"created_at": "2020-10-17T14:30:45.029983Z"
+	}
+]
 ```
 
 ### `create_game`

@@ -39,7 +39,7 @@ func (d *DB) ChangeHandle(ctx context.Context, userID, handle string) (string, e
 				(id, type, user_id, game_id, payload, created_at)
 				VALUES($1, $2, $3, $4, $5, $6)
 			`,
-			eventID, "change_handle", userID, nil, payloadBytes, time.Now(),
+			eventID, "change_handle", userID, nil, payloadBytes, time.Now().Format(time.RFC3339),
 		)
 		if err != nil {
 			return err

@@ -12,12 +12,12 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func Authenticate(next http.HandlerFunc, publicKey *ecdsa.PublicKey) http.HandlerFunc {
+func AuthenticateJWT(next http.HandlerFunc, publicKey *ecdsa.PublicKey) http.HandlerFunc {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		tokenString := req.Header.Get("Authorization")
 
 		if tokenString == "" {
-			httperr.HandleError(res, cher.New(cher.Unauthorized, nil))
+			httperr.HandleError(res, cher.New(cher.Unauthorized, nil, cher.New("missing_header", nil)))
 			return
 		}
 
@@ -45,5 +45,23 @@ func Authenticate(next http.HandlerFunc, publicKey *ecdsa.PublicKey) http.Handle
 		newReq := req.WithContext(newCtx)
 
 		next.ServeHTTP(res, newReq)
+	})
+}
+
+func AuthenticateInternalKey(next http.HandlerFunc, internalKey string) http.HandlerFunc {
+	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		tokenString := req.Header.Get("Authorization")
+
+		if tokenString == "" {
+			httperr.HandleError(res, cher.New(cher.Unauthorized, nil, cher.New("missing_header", nil)))
+			return
+		}
+
+		if tokenString != internalKey {
+			httperr.HandleError(res, cher.New(cher.Unauthorized, nil, cher.New("wrong_key", nil)))
+			return
+		}
+
+		next.ServeHTTP(res, req)
 	})
 }
