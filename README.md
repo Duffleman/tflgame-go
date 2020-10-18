@@ -186,6 +186,11 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 		"hammersmith-city",
 		"london-overground",
 		"dlr"
+	],
+	"zones": [
+		"2",
+		"3",
+		"5"
 	]
 }
 ```

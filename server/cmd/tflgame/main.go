@@ -61,6 +61,7 @@ func main() {
 	r.Route("/sync_tfl_data", r.SyncTFLData, nil, rpc.InternalOnlyAuth)
 
 	// game endpoints
+	r.Route("/test_game_options", r.TestGameOptions, rpc.TestGameOptionsSchema, rpc.UnsafeNoAuth)
 
 	addr := config.GetEnv("addr").(string)
 	r.Serve(addr)

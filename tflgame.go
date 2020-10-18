@@ -68,3 +68,13 @@ type ChangePinRequest struct {
 	CurrentPin string `json:"current_pin"`
 	NewPin     string `json:"new_pin"`
 }
+
+type GameOptions struct {
+	Modes []string `json:"modes"`
+	Lines []string `json:"lines"`
+	Zones []string `json:"zones"`
+}
+
+type TestGameOptionsResponse struct {
+	PossiblePrompts int `json:"possible_prompts"`
+}
