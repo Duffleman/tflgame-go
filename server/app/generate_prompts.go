@@ -6,16 +6,16 @@ import (
 	"time"
 
 	"tflgame"
+	"tflgame/server/lib/ptr"
 
 	"github.com/cuvva/ksuid-go"
 )
 
-var alwaysRemove = []string{"A", "E", "I", "O", "U", "'", "\"", "-"}
+var alwaysRemove = []string{"A", "E", "I", "O", "U", "'", "\"", "-", "&"}
 
 func (a *App) GeneratePrompts(promptsStr []string, do tflgame.DifficultyOptions) []tflgame.Prompt {
 	prompts := []tflgame.Prompt{}
 
-	promptsStr = shuffleString(promptsStr)
 	promptsStr = promptsStr[:do.Rounds]
 
 	for _, p := range promptsStr {
@@ -50,9 +50,11 @@ func (a *App) GeneratePrompts(promptsStr []string, do tflgame.DifficultyOptions)
 		var length *int
 
 		if do.RevealWordLength {
-			l := len(answer)
-			length = &l
+			length = ptr.Int(len(answer))
 		}
+
+		prompt = strings.TrimSpace(prompt)
+		answer = strings.TrimSpace(answer)
 
 		prompts = append(prompts, tflgame.Prompt{
 			ID:     id,

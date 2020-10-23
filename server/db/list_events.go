@@ -33,11 +33,11 @@ func (qw *QueryableWrapper) ListEvents(ctx context.Context, req *tflgame.ListEve
 	}
 
 	if p.before != nil {
-		q = q.Where("e.id < ?", p.before)
+		q = q.Where("e.serial < (SELECT serial FROM events WHERE id = ?)", p.before)
 	}
 
 	if p.after != nil {
-		q = q.Where("e.id > ?", p.after)
+		q = q.Where("e.serial > (SELECT serial FROM events WHERE id = ?)", p.after)
 	}
 
 	q = q.

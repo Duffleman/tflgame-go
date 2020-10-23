@@ -5,12 +5,17 @@ import (
 	"time"
 
 	"tflgame"
+	"tflgame/server/lib/cher"
 )
 
 func (a *App) Authenticate(ctx context.Context, req *tflgame.AuthenticateRequest) (*tflgame.AuthenticateResponse, error) {
 	user, err := a.db.Q.GetUserByTag(ctx, req.Handle, req.Numeric)
 	if err != nil {
 		return nil, err
+	}
+
+	if req.Pin == "" {
+		return nil, cher.New("disallowed", nil)
 	}
 
 	err = a.CheckPin(user, &req.Pin)

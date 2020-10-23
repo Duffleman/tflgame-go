@@ -55,12 +55,15 @@ func (d *DB) CreateUser(ctx context.Context, handle string, hash []byte) (*tflga
 			(id, handle, numeric, pin, score, created_at)
 			VALUES($1, $2, $3, $4, 0, $5)
 		`, userID, handle, numeric, insertHash, now)
+		if err != nil {
+			return err
+		}
 
 		user.Handle = handle
 		user.Numeric = numeric
 		user.UserID = userID
 
-		return err
+		return nil
 	})
 
 	return user, err

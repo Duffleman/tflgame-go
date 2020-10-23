@@ -103,15 +103,59 @@ type DifficultyOptions struct {
 }
 
 type CreateGameResponse struct {
-	ID       string `json:"id"`
+	ID   string      `json:"id"`
+	Next *NextPrompt `json:"next"`
+}
+
+// TODO(gm): this has some code smells of being used for too much
+type Prompt struct {
+	ID          string     `json:"id"`
+	UserID      string     `json:"_"`
+	GameID      string     `json:"_"`
+	Prompt      string     `json:"prompt"`
+	Answer      string     `json:"answer"`
+	Length      *int       `json:"length"`
+	AnswerGiven *string    `json:"_"`
+	Correct     bool       `json:"_"`
+	CreatedAt   time.Time  `json:"_"`
+	AnsweredAt  *time.Time `json:"_"`
+	HintGivenAt *time.Time `json:"_"`
+}
+
+type SubmitAnswerRequest struct {
+	UserID   string `json:"user_id"`
+	PromptID string `json:"prompt_id"`
+	Answer   string `json:"answer"`
+}
+
+type SubmitAnswerResponse struct {
+	UserID  string      `json:"user_id"`
+	Correct bool        `json:"correct"`
+	Answer  string      `json:"answer"`
+	Next    *NextPrompt `json:"next"`
+}
+
+type NextPrompt struct {
 	PromptID string `json:"prompt_id"`
 	Prompt   string `json:"prompt"`
 	Length   *int   `json:"length"`
 }
 
-type Prompt struct {
-	ID     string
-	Prompt string
-	Answer string
-	Length *int
+type GetCurrentGameRequest struct {
+	UserID string `json:"user_id"`
+}
+
+type GetCurrentGameResponse struct {
+	GameID string      `json:"game_id"`
+	Next   *NextPrompt `json:"next"`
+}
+
+type GetHintRequest struct {
+	UserID   string `json:"user_id"`
+	PromptID string `json:"prompt_id"`
+}
+
+type GetHintResponse struct {
+	Prompt string   `json:"prompt"`
+	Lines  []string `json:"lines"`
 }

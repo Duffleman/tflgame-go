@@ -8,7 +8,7 @@ import (
 )
 
 func (a *App) CreateGame(ctx context.Context, req *tflgame.CreateGameRequest) (*tflgame.CreateGameResponse, error) {
-	promptsStr, err := a.db.Q.GetPossiblePrompts(ctx, &req.GameOptions)
+	promptsStr, err := a.db.Q.GetPossiblePrompts(ctx, &req.GameOptions, req.DifficultyOptions.Rounds)
 	if err != nil {
 		return nil, err
 	}
@@ -28,9 +28,11 @@ func (a *App) CreateGame(ctx context.Context, req *tflgame.CreateGameRequest) (*
 	}
 
 	return &tflgame.CreateGameResponse{
-		ID:       gameID,
-		PromptID: prompts[0].ID,
-		Prompt:   prompts[0].Prompt,
-		Length:   prompts[0].Length,
+		ID: gameID,
+		Next: &tflgame.NextPrompt{
+			PromptID: prompts[0].ID,
+			Prompt:   prompts[0].Prompt,
+			Length:   prompts[0].Length,
+		},
 	}, nil
 }

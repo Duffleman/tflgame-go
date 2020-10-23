@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"tflgame"
+	"tflgame/server/lib/cher"
 
 	"github.com/cuvva/ksuid-go"
 )
@@ -14,13 +15,23 @@ func (d *DB) CreateGame(ctx context.Context, req *tflgame.CreateGameRequest, pro
 	var gameID string
 
 	err := d.DoTx(ctx, func(qw *QueryableWrapper) error {
+		existingGameID, err := qw.GetCurrentGame(ctx, req.UserID)
+		if err != nil {
+			return err
+		}
+
+		if existingGameID != "" {
+			return cher.New("game_in_progress", cher.M{
+				"game_id": existingGameID,
+			})
+		}
+
 		eventID := ksuid.Generate("event").String()
 		gameID = ksuid.Generate("game").String()
 		now := time.Now().Format(time.RFC3339)
 
 		payloadBytes, err := json.Marshal(tflgame.CreateGamePayload{
 			CreationID:        gameID,
-			UserID:            req.UserID,
 			Prompts:           prompts,
 			DifficultyOptions: req.DifficultyOptions,
 			GameOptions:       req.GameOptions,
@@ -73,15 +84,14 @@ func (d *DB) CreateGame(ctx context.Context, req *tflgame.CreateGameRequest, pro
 		for _, p := range prompts {
 			_, err = qw.q.ExecContext(ctx, `
 					INSERT INTO proj_prompts
-					(id, user_id, game_id, prompt, answer, correct, created_at)
-					VALUES ($1, $2, $3, $4, $5, $6, $7)
+					(id, user_id, game_id, prompt, answer, created_at)
+					VALUES ($1, $2, $3, $4, $5, $6)
 				`,
 				p.ID,
 				req.UserID,
 				gameID,
 				p.Prompt,
 				p.Answer,
-				false,
 				now,
 			)
 			if err != nil {

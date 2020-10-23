@@ -232,9 +232,11 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 ```json
 {
 	"id": "game_000000C0HbJWhvF4jnfFcEulxhsaG",
-	"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tr",
-	"prompt": "W HTC HP L",
-	"length": 11
+	"next": {
+		"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tr",
+		"prompt": "W HTC HP L",
+		"length": 11
+	}
 }
 ```
 
@@ -256,12 +258,57 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 ```json
 {
 	"correct": true,
-	"prompt_id": "prompt_000000C0HbJWhvF4jnfFcEulxhsaG",
-	"prompt": "BR KNG"
+	"answer": "WHITECHAPEL",
+	"next": {
+		"prompt_id": "prompt_000000C0HbJWhvF4jnfFcEulxhsaG",
+		"prompt": "BR KNG"
+	}
 }
 ```
 
 `prompt` will be `null` if the round count has matched. Use `get_game_state` to see the final scores.
+
+### `get_current_game`
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN"
+}
+```
+
+#### Response
+
+```json
+{
+	"game_id": "game_000000C0HbJWhvF4jnfFcEulxhsaG",
+	"next": {
+		"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tp",
+		"prompt": "VL",
+		"length": 4
+	}
+}
+```
+
+### `get_hint`
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tp"
+}
+```
+
+#### Response
+
+```json
+{
+	"lines": ["central", "waterloo-city"]
+}
+```
 
 ### `get_game_state`
 
@@ -295,14 +342,6 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 		"overground": true
 	}
 }
-```
-
-### `get_game_options`
-
-#### Response
-
-```json
-
 ```
 
 ### `list_leaderboard`

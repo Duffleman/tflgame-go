@@ -5,7 +5,7 @@ CREATE TABLE events (
     type text NOT NULL,
     user_id text NOT NULL,
     game_id text,
-    payload jsonb NOT NULL,
+    payload jsonb,
     created_at timestamp without time zone NOT NULL
 );
 
@@ -51,10 +51,12 @@ CREATE TABLE proj_prompts (
     user_id text NOT NULL REFERENCES proj_users (id),
     game_id text NOT NULL REFERENCES proj_games (id),
     prompt text NOT NULL,
-    answer text,
+    answer text NOT NULL,
+	answer_given text,
     correct boolean NOT NULL DEFAULT FALSE,
     created_at timestamp without time zone NOT NULL,
-    answered_at timestamp without time zone
+    answered_at timestamp without time zone,
+	hint_given_at timestamp without time zone
 );
 
 CREATE INDEX proj_prompts_user_id_idx ON proj_prompts (user_id text_ops);

@@ -40,12 +40,25 @@ type ReleaseHandlePayload struct {
 }
 
 type CreateGamePayload struct {
-	CreationID        string   `json:"creation_id"`
-	UserID            string   `json:"user_id"`
-	Prompts           []Prompt `json:"prompts"`
-	DifficultyOptions DifficultyOptions
-	GameOptions       GameOptions
+	CreationID        string            `json:"creation_id"`
+	Prompts           []Prompt          `json:"prompts"`
+	DifficultyOptions DifficultyOptions `json:"difficulty_options"`
+	GameOptions       GameOptions       `json:"game_options"`
 }
+
+type AnswerPromptPayload struct {
+	PromptID    string `json:"prompt_id"`
+	AnswerGiven string `json:"answer_given"`
+	Correct     bool   `json:"correct"`
+}
+
+type GiveHintPayload struct {
+	PromptID  string   `json:"prompt_id"`
+	NewPrompt string   `json:"new_prompt"`
+	Lines     []string `json:"lines"`
+}
+
+type FinishGamePayload struct{}
 
 func PayloadHandler(eventType string, raw []byte, in *interface{}) error {
 	switch eventType {
@@ -79,6 +92,22 @@ func PayloadHandler(eventType string, raw []byte, in *interface{}) error {
 		*in = payload
 	case "create_game":
 		var payload CreateGamePayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
+	case "finish_game":
+		*in = FinishGamePayload{}
+	case "answer_prompt":
+		var payload AnswerPromptPayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
+	case "give_hint":
+		var payload GiveHintPayload
 		if err := json.Unmarshal(raw, &payload); err != nil {
 			return err
 		}
