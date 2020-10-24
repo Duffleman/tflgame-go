@@ -13,11 +13,11 @@ func (a *App) CompareAnswers(prompt, answer string) bool {
 	answer = strings.Replace(answer, " ", "", -1)
 	prompt = strings.Replace(prompt, " ", "", -1)
 
-	for _, v := range alwaysRemove {
+	for _, v := range removeForComparison {
 		prompt = strings.Replace(prompt, v, "", -1)
 	}
 
-	for _, v := range alwaysRemove {
+	for _, v := range removeForComparison {
 		answer = strings.Replace(answer, v, "", -1)
 	}
 
