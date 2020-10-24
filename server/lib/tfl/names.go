@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-var re = regexp.MustCompile(`(?m)^([A-Za-z-'&\s]+)`)
+var re = regexp.MustCompile(`(?m)^([A-Za-z-'&\.\s]+)`)
 
 func GetStationShortname(longName string) string {
 	shortName := longName

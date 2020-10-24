@@ -11,7 +11,7 @@ import (
 	"github.com/cuvva/ksuid-go"
 )
 
-var alwaysRemove = []string{"A", "E", "I", "O", "U", "'", "\"", "-", "&"}
+var alwaysRemove = []string{"A", "E", "I", "O", "U", "'", "\"", "-", "&", "."}
 
 func (a *App) GeneratePrompts(promptsStr []string, do tflgame.DifficultyOptions) []tflgame.Prompt {
 	prompts := []tflgame.Prompt{}

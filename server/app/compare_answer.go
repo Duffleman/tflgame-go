@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-var removeForComparison = []string{"'", "\"", "-"}
+var removeForComparison = []string{"'", "\"", "-", "&", "."}
 
 func (a *App) CompareAnswers(prompt, answer string) bool {
 	answer = strings.ToUpper(answer)
