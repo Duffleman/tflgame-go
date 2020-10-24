@@ -15,9 +15,6 @@ func (qw *QueryableWrapper) GetCurrentGame(ctx context.Context, userID string) (
 	`, userID)
 
 	err := row.Scan(&existingGameID)
-	if err != nil {
-		return "", err
-	}
 
-	return existingGameID, nil
+	return existingGameID, coerceNotFound(err)
 }

@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"tflgame"
@@ -37,8 +36,6 @@ func (qw *QueryableWrapper) GetPossiblePrompts(ctx context.Context, options *tfl
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(query)
 
 	rows, err := qw.q.QueryContext(ctx, query, values...)
 	if err != nil {

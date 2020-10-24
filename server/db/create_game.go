@@ -17,7 +17,10 @@ func (d *DB) CreateGame(ctx context.Context, req *tflgame.CreateGameRequest, pro
 	err := d.DoTx(ctx, func(qw *QueryableWrapper) error {
 		existingGameID, err := qw.GetCurrentGame(ctx, req.UserID)
 		if err != nil {
-			return err
+			v, ok := err.(cher.E)
+			if !ok || v.Code != cher.NotFound {
+				return err
+			}
 		}
 
 		if existingGameID != "" {
