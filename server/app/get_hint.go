@@ -51,6 +51,9 @@ func (a *App) GetHint(ctx context.Context, req *tflgame.GetHintRequest) (*tflgam
 
 		return nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return &tflgame.GetHintResponse{
 		Prompt: newPrompt,
