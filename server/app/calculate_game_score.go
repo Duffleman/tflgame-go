@@ -33,8 +33,8 @@ func (a *App) CalculateGameScore(do tflgame.DifficultyOptions, prompts []*tflgam
 	for _, p := range prompts {
 		if p.AnswerGiven == nil {
 			c.Add(tflgame.CalculationEvent{
-				PromptID: ptr.String(p.ID),
-				Note:     "Prompt not answered",
+				Item: &tflgame.CalculationItem{ID: p.ID, Type: "prompt"},
+				Note: "Prompt not answered",
 			})
 
 			continue
@@ -44,27 +44,27 @@ func (a *App) CalculateGameScore(do tflgame.DifficultyOptions, prompts []*tflgam
 			score += additionForCorrect
 
 			c.Add(tflgame.CalculationEvent{
-				PromptID: ptr.String(p.ID),
-				Effect:   ptr.String(fmt.Sprintf("%d", additionForCorrect)),
-				Note:     "Answered & correct",
-				Score:    score,
+				Item:   &tflgame.CalculationItem{ID: p.ID, Type: "prompt"},
+				Effect: ptr.String(fmt.Sprintf("%d", additionForCorrect)),
+				Note:   "Answered & correct",
+				Score:  score,
 			})
 
 			if p.HintGivenAt != nil {
 				score += deductionForHint
 
 				c.Add(tflgame.CalculationEvent{
-					PromptID: ptr.String(p.ID),
-					Effect:   ptr.String(fmt.Sprintf("%d", deductionForHint)),
-					Note:     "Hint was given",
-					Score:    score,
+					Item:   &tflgame.CalculationItem{ID: p.ID, Type: "prompt"},
+					Effect: ptr.String(fmt.Sprintf("%d", deductionForHint)),
+					Note:   "Hint was given",
+					Score:  score,
 				})
 			}
 		} else {
 			c.Add(tflgame.CalculationEvent{
-				PromptID: ptr.String(p.ID),
-				Note:     "Answered but incorrect",
-				Score:    score,
+				Item:  &tflgame.CalculationItem{ID: p.ID, Type: "prompt"},
+				Note:  "Answered but incorrect",
+				Score: score,
 			})
 		}
 	}

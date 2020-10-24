@@ -29,6 +29,13 @@ func (a *App) CalculateUserScore(ctx context.Context, userID string) (int, *tflg
 
 	for _, g := range games {
 		totalGameScore += float64(g.Score)
+
+		c.Add(tflgame.CalculationEvent{
+			Item:   &tflgame.CalculationItem{ID: g.ID, Type: "game"},
+			Note:   "Game won",
+			Effect: ptr.String(fmt.Sprintf("%d", g.Score)),
+			Score:  totalGameScore,
+		})
 	}
 
 	score = totalGameScore
@@ -36,9 +43,8 @@ func (a *App) CalculateUserScore(ctx context.Context, userID string) (int, *tflg
 	c.Base = score
 
 	c.Add(tflgame.CalculationEvent{
-		Note:   "Game score summed",
-		Effect: ptr.String(fmt.Sprintf("%2f", totalGameScore)),
-		Score:  score,
+		Note:  "Game score summed",
+		Score: score,
 	})
 
 	score = score / float64(len(games))
@@ -47,7 +53,7 @@ func (a *App) CalculateUserScore(ctx context.Context, userID string) (int, *tflg
 
 	c.Add(tflgame.CalculationEvent{
 		Note:   "Game score averaged",
-		Effect: ptr.String(fmt.Sprintf("/ %d", len(games))),
+		Effect: ptr.String(fmt.Sprintf("/%d", len(games))),
 		Score:  score,
 	})
 

@@ -9,10 +9,15 @@ type Calculations struct {
 }
 
 type CalculationEvent struct {
-	PromptID *string `json:"prompt_id"`
-	Effect   *string `json:"effect"`
-	Score    float64 `json:"score"`
-	Note     string  `json:"note"`
+	Item   *CalculationItem `json:"item"`
+	Effect *string          `json:"effect"`
+	Score  float64          `json:"score"`
+	Note   string           `json:"note"`
+}
+
+type CalculationItem struct {
+	Type string `json:"type"`
+	ID   string `json:"id"`
 }
 
 func (c *Calculations) Add(s CalculationEvent) {

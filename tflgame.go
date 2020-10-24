@@ -174,6 +174,6 @@ type GetGameStateResponse struct {
 }
 
 type ExplainScoreRequest struct {
-	UserID string `json:"user_id"`
-	GameID string `json:"game_id"`
+	UserID string  `json:"user_id"`
+	GameID *string `json:"game_id"`
 }

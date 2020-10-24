@@ -357,6 +357,8 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 }
 ```
 
+`game_id` is nullable, if so the user score is provided.
+
 #### Response
 
 ```json

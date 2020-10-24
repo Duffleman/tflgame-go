@@ -26,7 +26,7 @@ var ExplainScoreSchema = gojsonschema.NewStringLoader(`{
 		},
 
 		"game_id": {
-			"type": "string",
+			"type": ["string", "null"],
 			"minLength": 1
 		}
 	}

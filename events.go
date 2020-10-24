@@ -2,8 +2,9 @@ package tflgame
 
 import (
 	"encoding/json"
-	"errors"
 	"time"
+
+	"tflgame/server/lib/cher"
 )
 
 type Event struct {
@@ -143,7 +144,9 @@ func PayloadHandler(eventType string, raw []byte, in *interface{}) error {
 
 		*in = payload
 	default:
-		return errors.New("unknown event type")
+		return cher.New("unknown_event_type", cher.M{
+			"event_type": eventType,
+		})
 	}
 
 	return nil

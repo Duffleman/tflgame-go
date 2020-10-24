@@ -11,7 +11,7 @@ import (
 
 func (qw *QueryableWrapper) ListAllGames(ctx context.Context, userID string, onlyFinished bool) ([]*DBGame, error) {
 	qb := NewQueryBuilder().
-		Select("e.type, e.payload, e.user_id, g.created_at, g.score, g.finished_at").
+		Select("e.type, e.payload, g.user_id, g.id, g.created_at, g.score, g.finished_at").
 		From("events e").
 		Join("proj_games g ON e.game_id = g.id").
 		Where(sq.Eq{
@@ -43,7 +43,7 @@ func (qw *QueryableWrapper) ListAllGames(ctx context.Context, userID string, onl
 		var payloadBytes []byte
 		var g DBGame
 
-		err := rows.Scan(&eventType, &payloadBytes, &g.UserID, &g.CreatedAt, &g.Score, &g.FinishedAt)
+		err := rows.Scan(&eventType, &payloadBytes, &g.UserID, &g.ID, &g.CreatedAt, &g.Score, &g.FinishedAt)
 		if err != nil {
 			return nil, err
 		}

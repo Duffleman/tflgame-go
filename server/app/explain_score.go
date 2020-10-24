@@ -8,7 +8,16 @@ import (
 )
 
 func (a *App) ExplainScore(ctx context.Context, req *tflgame.ExplainScoreRequest) (*tflgame.Calculations, error) {
-	game, err := a.db.Q.GetGame(ctx, req.GameID)
+	if req.GameID == nil {
+		_, calc, err := a.CalculateUserScore(ctx, req.UserID)
+		if err != nil {
+			return nil, err
+		}
+
+		return calc, nil
+	}
+
+	game, err := a.db.Q.GetGame(ctx, *req.GameID)
 	if err != nil {
 		return nil, err
 	}
@@ -17,7 +26,7 @@ func (a *App) ExplainScore(ctx context.Context, req *tflgame.ExplainScoreRequest
 		return nil, cher.New(cher.Unauthorized, nil)
 	}
 
-	prompts, err := a.db.Q.ListPrompts(ctx, req.GameID)
+	prompts, err := a.db.Q.ListPrompts(ctx, *req.GameID)
 	if err != nil {
 		return nil, err
 	}
