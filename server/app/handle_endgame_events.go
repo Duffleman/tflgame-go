@@ -50,7 +50,7 @@ func (a *App) HandleEndgameEvents(ctx context.Context, can context.CancelFunc, g
 			return err
 		}
 
-		userScore, c, err := a.CalculateUserScore(ctx, game.UserID)
+		userScore, _, err := a.CalculateUserScore(ctx, game.UserID)
 		if err != nil {
 			return err
 		}
