@@ -159,3 +159,21 @@ type GetHintResponse struct {
 	Prompt string   `json:"prompt"`
 	Lines  []string `json:"lines"`
 }
+
+type GetGameStateRequest struct {
+	UserID string `json:"user_id"`
+	GameID string `json:"game_id"`
+}
+
+type GetGameStateResponse struct {
+	InProgress        bool              `json:"in_progress"`
+	Score             int               `json:"score"`
+	GameTime          string            `json:"game_time"`
+	DifficultyOptions DifficultyOptions `json:"difficulty_options"`
+	GameOptions       GameOptions       `json:"game_options"`
+}
+
+type ExplainScoreRequest struct {
+	UserID string `json:"user_id"`
+	GameID string `json:"game_id"`
+}

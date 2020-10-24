@@ -44,6 +44,8 @@ CREATE TABLE proj_games (
 
 CREATE INDEX proj_games_user_id_idx ON proj_games (user_id text_ops);
 
+CREATE INDEX events_type_game_id_idx ON events (TYPE text_ops, game_id text_ops);
+
 
 /* prompts */
 CREATE TABLE proj_prompts (
@@ -52,11 +54,11 @@ CREATE TABLE proj_prompts (
     game_id text NOT NULL REFERENCES proj_games (id),
     prompt text NOT NULL,
     answer text NOT NULL,
-	answer_given text,
+    answer_given text,
     correct boolean NOT NULL DEFAULT FALSE,
     created_at timestamp without time zone NOT NULL,
     answered_at timestamp without time zone,
-	hint_given_at timestamp without time zone
+    hint_given_at timestamp without time zone
 );
 
 CREATE INDEX proj_prompts_user_id_idx ON proj_prompts (user_id text_ops);

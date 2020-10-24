@@ -316,7 +316,8 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 ```json
 {
-	"id": "game_000000C0HbJWhvF4jnfFcEulxhsaG"
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"game_id": "game_000000C0HbJWhvF4jnfFcEulxhsaG"
 }
 ```
 
@@ -324,6 +325,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 ```json
 {
+	"in_progress": false,
 	"score": 18,
 	"game_time": "P14M25S",
 	"difficulty_options": {
@@ -341,6 +343,36 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 		"bus_stops": false,
 		"overground": true
 	}
+}
+```
+
+### `explain_score`
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"game_id": "game_000000C0HbJWhvF4jnfFcEulxhsaG"
+}
+```
+
+#### Response
+
+```json
+{
+	"start": 0,
+	"base": 2,
+	"end": 2,
+	"final": 2,
+	"events": [
+		{
+			"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tp",
+			"effect": "+2",
+			"score": 2,
+			"note": "Answered & correct"
+		}
+	]
 }
 ```
 

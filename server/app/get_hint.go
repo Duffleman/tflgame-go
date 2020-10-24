@@ -27,6 +27,15 @@ func (a *App) GetHint(ctx context.Context, req *tflgame.GetHintRequest) (*tflgam
 			return cher.New("already_answered", nil)
 		}
 
+		nextPrompt, err := qw.GetNextPrompt(ctx, prompt.GameID)
+		if err != nil {
+			return err
+		}
+
+		if nextPrompt.ID != prompt.ID {
+			return cher.New("cannot_look_ahead", nil)
+		}
+
 		lines, err = a.db.Q.GetAllLines(ctx, prompt.Answer)
 		if err != nil {
 			return err
