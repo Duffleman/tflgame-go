@@ -62,7 +62,7 @@ type FinishGamePayload struct {
 	Score int `json:"score"`
 }
 
-type RecalculateScorePayload struct {
+type RecalculateGameScorePayload struct {
 	Score int `json:"score"`
 }
 
@@ -110,8 +110,8 @@ func PayloadHandler(eventType string, raw []byte, in *interface{}) error {
 		}
 
 		*in = payload
-	case "recalculate_score":
-		var payload RecalculateScorePayload
+	case "recalculate_game_score":
+		var payload RecalculateGameScorePayload
 		if err := json.Unmarshal(raw, &payload); err != nil {
 			return err
 		}

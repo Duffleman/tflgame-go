@@ -19,7 +19,7 @@ const (
 	changeLetterOrder   = 2.5
 )
 
-func (a *App) CalculateScore(do tflgame.DifficultyOptions, prompts []*tflgame.Prompt) (int, *tflgame.Calculations, error) {
+func (a *App) CalculateGameScore(do tflgame.DifficultyOptions, prompts []*tflgame.Prompt) (int, *tflgame.Calculations, error) {
 	c := &tflgame.Calculations{}
 
 	var score float64 = start

@@ -26,7 +26,7 @@ func (a *App) HandleEndgameEvents(ctx context.Context, can context.CancelFunc, g
 			}
 		}
 
-		score, _, err := a.CalculateScore(game.DifficultyOptions, prompts)
+		score, _, err := a.CalculateGameScore(game.DifficultyOptions, prompts)
 		if err != nil {
 			return err
 		}

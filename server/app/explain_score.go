@@ -22,7 +22,7 @@ func (a *App) ExplainScore(ctx context.Context, req *tflgame.ExplainScoreRequest
 		return nil, err
 	}
 
-	_, calcs, err := a.CalculateScore(game.DifficultyOptions, prompts)
+	_, calcs, err := a.CalculateGameScore(game.DifficultyOptions, prompts)
 	if err != nil {
 		return nil, err
 	}

@@ -25,7 +25,7 @@ func (a *App) GetGameState(ctx context.Context, req *tflgame.GetGameStateRequest
 		return nil, err
 	}
 
-	score, _, err := a.CalculateScore(game.DifficultyOptions, prompts)
+	score, _, err := a.CalculateGameScore(game.DifficultyOptions, prompts)
 	if err != nil {
 		return nil, err
 	}
