@@ -26,22 +26,37 @@ func (a *App) HandleEndgameEvents(ctx context.Context, can context.CancelFunc, g
 			}
 		}
 
-		score, _, err := a.CalculateGameScore(game.DifficultyOptions, prompts)
+		gameScore, _, err := a.CalculateGameScore(game.DifficultyOptions, prompts)
 		if err != nil {
 			return err
 		}
 
 		switch true {
 		case game.FinishedAt == nil:
-			err := qw.FinishGame(ctx, game.UserID, gameID, score)
+			err := qw.FinishGame(ctx, game.UserID, gameID, gameScore)
 			if err != nil {
 				return err
 			}
-		case game.Score != score:
-			err = qw.RecalculateGameScore(ctx, game.UserID, gameID, score)
+		case game.Score != gameScore:
+			err = qw.RecalculateGameScore(ctx, game.UserID, gameID, gameScore)
 			if err != nil {
 				return err
 			}
+		}
+
+		// TODO(gm): parallelise if slow
+		user, err := qw.GetUserByID(ctx, game.UserID)
+		if err != nil {
+			return err
+		}
+
+		userScore, c, err := a.CalculateUserScore(ctx, game.UserID)
+		if err != nil {
+			return err
+		}
+
+		if user.Score != userScore {
+			qw.RecalculateUserScore(ctx, user.ID, userScore)
 		}
 
 		return nil
