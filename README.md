@@ -385,7 +385,6 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 	{
 		"handle": "DFL",
 		"numeric": "001",
-		"game_in_progress": false,
 		"score": 52,
 		"level": {
 			"name": "Bronze",
@@ -402,8 +401,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 ```json
 {
 	"handle": "DFL",
-	"numeric": "001",
-	"limit": 10
+	"numeric": "001"
 }
 ```
 
@@ -412,23 +410,12 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 ```json
 [
 	{
-		"score": 18,
-		"game_time": "P1H25S",
-		"difficulty_options": {
-			"rounds": 20,
-			"include_random_spaces": true,
-			"change_letter_order": true,
-			"reveal_word_length": false,
-		},
-		"game_options": {
-			"lines": [
-				"district",
-				"bakerloo",
-				"circle"
-			],
-			"bus_stops": false,
-			"overground": true
-		}
+		"game_id": "game_000000C0h8airLlRVMBiATkuj2c3I",
+		"score": 23
+	},
+	{
+		"game_id": "game_000000C0h8airLlRVMBiATkuj2c3K",
+		"score": 12
 	}
 ]
 ```

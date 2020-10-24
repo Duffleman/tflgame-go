@@ -10,6 +10,7 @@ import (
 	"github.com/cuvva/ksuid-go"
 )
 
+// GiveHint gives a hint for a prompt. You **must** run this within a transaction.
 func (qw *QueryableWrapper) GiveHint(ctx context.Context, userID, gameID string, payload *tflgame.GiveHintPayload) error {
 	eventID := ksuid.Generate("event").String()
 	now := time.Now().Format(time.RFC3339)

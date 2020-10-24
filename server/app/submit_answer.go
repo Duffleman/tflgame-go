@@ -40,18 +40,14 @@ func (a *App) SubmitAnswer(ctx context.Context, req *tflgame.SubmitAnswerRequest
 		}
 
 		nextPrompt, err = qw.GetNextPrompt(ctx, prompt.GameID)
-		if v, ok := err.(cher.E); ok {
-			if v.Code == cher.NotFound {
-				err = qw.FinishGame(ctx, prompt.UserID, prompt.GameID)
-				if err != nil {
-					return err
-				}
+		if err != nil {
+			v, ok := err.(cher.E)
+			if !ok || v.Code != cher.NotFound {
+				return err
 			}
-
-			return err
 		}
 
-		return err
+		return nil
 	})
 	if err != nil {
 		return nil, err
@@ -68,6 +64,9 @@ func (a *App) SubmitAnswer(ctx context.Context, req *tflgame.SubmitAnswerRequest
 			PromptID: nextPrompt.ID,
 			Prompt:   nextPrompt.Prompt,
 		}
+	} else {
+		bgCtx, can := context.WithTimeout(context.Background(), 1*time.Minute)
+		go a.HandleEndgameEvents(bgCtx, can, prompt.GameID)
 	}
 
 	return res, nil

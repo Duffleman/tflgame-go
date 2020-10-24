@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"time"
 
 	"tflgame"
 	"tflgame/server/lib/cher"
@@ -37,6 +38,9 @@ func (a *App) GetGameState(ctx context.Context, req *tflgame.GetGameStateRequest
 		duration := game.FinishedAt.Sub(game.CreatedAt)
 		p, _ = period.NewOf(duration)
 	}
+
+	bgCtx, can := context.WithTimeout(context.Background(), 1*time.Minute)
+	go a.HandleEndgameEvents(bgCtx, can, req.GameID)
 
 	return &tflgame.GetGameStateResponse{
 		InProgress:        inProgress,

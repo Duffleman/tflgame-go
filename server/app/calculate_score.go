@@ -9,19 +9,20 @@ import (
 
 const (
 	// Additions
-	AdditionForCorrect = 2
-	DeductionForHint   = -1
+	start              = 0
+	additionForCorrect = 2
+	deductionForHint   = -1
 
 	// Multiplications
-	IncludeRandomSpaces = 1.1
-	RevealWordLength    = 0.8
-	ChangeLetterOrder   = 2.5
+	includeRandomSpaces = 1.1
+	revealWordLength    = 0.8
+	changeLetterOrder   = 2.5
 )
 
 func (a *App) CalculateScore(do tflgame.DifficultyOptions, prompts []*tflgame.Prompt) (int, *tflgame.Calculations, error) {
 	c := &tflgame.Calculations{}
 
-	var score float64 = 0
+	var score float64 = start
 
 	c.Start = score
 	c.Add(tflgame.CalculationEvent{
@@ -40,21 +41,21 @@ func (a *App) CalculateScore(do tflgame.DifficultyOptions, prompts []*tflgame.Pr
 		}
 
 		if p.Correct {
-			score += AdditionForCorrect
+			score += additionForCorrect
 
 			c.Add(tflgame.CalculationEvent{
 				PromptID: ptr.String(p.ID),
-				Effect:   ptr.String(fmt.Sprintf("%d", AdditionForCorrect)),
+				Effect:   ptr.String(fmt.Sprintf("%d", additionForCorrect)),
 				Note:     "Answered & correct",
 				Score:    score,
 			})
 
 			if p.HintGivenAt != nil {
-				score += DeductionForHint
+				score += deductionForHint
 
 				c.Add(tflgame.CalculationEvent{
 					PromptID: ptr.String(p.ID),
-					Effect:   ptr.String(fmt.Sprintf("%d", DeductionForHint)),
+					Effect:   ptr.String(fmt.Sprintf("%d", deductionForHint)),
 					Note:     "Hint was given",
 					Score:    score,
 				})
@@ -76,31 +77,31 @@ func (a *App) CalculateScore(do tflgame.DifficultyOptions, prompts []*tflgame.Pr
 	})
 
 	if do.IncludeRandomSpaces {
-		score *= IncludeRandomSpaces
+		score *= includeRandomSpaces
 
 		c.Add(tflgame.CalculationEvent{
 			Note:   "do.include_random_spaces is ON",
-			Effect: ptr.String(fmt.Sprintf("*%2f", IncludeRandomSpaces)),
+			Effect: ptr.String(fmt.Sprintf("*%2f", includeRandomSpaces)),
 			Score:  score,
 		})
 	}
 
 	if do.RevealWordLength {
-		score *= RevealWordLength
+		score *= revealWordLength
 
 		c.Add(tflgame.CalculationEvent{
 			Note:   "do.reveal_word_length is ON",
-			Effect: ptr.String(fmt.Sprintf("*%2f", RevealWordLength)),
+			Effect: ptr.String(fmt.Sprintf("*%2f", revealWordLength)),
 			Score:  score,
 		})
 	}
 
 	if do.ChangeLetterOrder {
-		score *= ChangeLetterOrder
+		score *= changeLetterOrder
 
 		c.Add(tflgame.CalculationEvent{
 			Note:   "do.change_letter_order is ON",
-			Effect: ptr.String(fmt.Sprintf("*%2f", ChangeLetterOrder)),
+			Effect: ptr.String(fmt.Sprintf("*%2f", changeLetterOrder)),
 			Score:  score,
 		})
 	}

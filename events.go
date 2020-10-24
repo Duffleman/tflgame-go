@@ -58,7 +58,13 @@ type GiveHintPayload struct {
 	Lines     []string `json:"lines"`
 }
 
-type FinishGamePayload struct{}
+type FinishGamePayload struct {
+	Score int `json:"score"`
+}
+
+type RecalculateScorePayload struct {
+	Score int `json:"score"`
+}
 
 func PayloadHandler(eventType string, raw []byte, in *interface{}) error {
 	switch eventType {
@@ -98,7 +104,19 @@ func PayloadHandler(eventType string, raw []byte, in *interface{}) error {
 
 		*in = payload
 	case "finish_game":
-		*in = FinishGamePayload{}
+		var payload FinishGamePayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
+	case "recalculate_score":
+		var payload RecalculateScorePayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
 	case "answer_prompt":
 		var payload AnswerPromptPayload
 		if err := json.Unmarshal(raw, &payload); err != nil {
