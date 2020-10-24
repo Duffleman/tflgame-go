@@ -11,7 +11,7 @@ import (
 )
 
 func (a *App) GetGameState(ctx context.Context, req *tflgame.GetGameStateRequest) (*tflgame.GetGameStateResponse, error) {
-	game, err := a.db.Q.GetGameOpts(ctx, req.GameID)
+	game, err := a.db.Q.GetGame(ctx, req.GameID)
 	if err != nil {
 		return nil, err
 	}

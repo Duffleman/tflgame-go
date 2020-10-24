@@ -10,7 +10,7 @@ func (a *App) HandleEndgameEvents(ctx context.Context, can context.CancelFunc, g
 	defer can()
 
 	err := a.db.DoTx(ctx, func(qw *db.QueryableWrapper) error {
-		game, err := qw.GetGameOpts(ctx, gameID)
+		game, err := qw.GetGame(ctx, gameID)
 		if err != nil {
 			return err
 		}
@@ -38,7 +38,7 @@ func (a *App) HandleEndgameEvents(ctx context.Context, can context.CancelFunc, g
 				return err
 			}
 		case game.Score != score:
-			err = qw.RecalculateScore(ctx, game.UserID, gameID, score)
+			err = qw.RecalculateGameScore(ctx, game.UserID, gameID, score)
 			if err != nil {
 				return err
 			}

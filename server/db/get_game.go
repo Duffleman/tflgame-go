@@ -19,7 +19,7 @@ type DBGame struct {
 	GameOptions       tflgame.GameOptions
 }
 
-func (qw *QueryableWrapper) GetGameOpts(ctx context.Context, gameID string) (*DBGame, error) {
+func (qw *QueryableWrapper) GetGame(ctx context.Context, gameID string) (*DBGame, error) {
 	query, values, err := NewQueryBuilder().
 		Select("e.type, e.payload, e.user_id, g.created_at, g.score, g.finished_at").
 		From("events e").
