@@ -268,7 +268,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 `prompt` will be `null` if the round count has matched. Use `get_game_state` to see the final scores.
 
-### `get_current_game`
+### `get_current_game`
 
 #### Request
 
@@ -291,7 +291,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 }
 ```
 
-### `get_hint`
+### `get_hint`
 
 #### Request
 
@@ -359,7 +359,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 `game_id` is nullable, if so the user score is provided.
 
-#### Response
+#### Response
 
 ```json
 {
@@ -403,8 +403,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 
 ```json
 {
-	"handle": "DFL",
-	"numeric": "001"
+	"user_id": "user_000000C0hsG8dDlvxfRVKxjtbUwaY",
 }
 ```
 
