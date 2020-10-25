@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"tflgame"
-	"tflgame/server/lib/cher"
 
 	sq "github.com/Masterminds/squirrel"
 )
@@ -48,7 +47,6 @@ func (qw *QueryableWrapper) GetPossiblePrompts(ctx context.Context, options *tfl
 	defer rows.Close()
 
 	promptMap := map[string]struct{}{}
-	prompts := []string{}
 
 	for rows.Next() {
 		var p string
@@ -61,11 +59,12 @@ func (qw *QueryableWrapper) GetPossiblePrompts(ctx context.Context, options *tfl
 		p = strings.TrimSpace(p)
 
 		promptMap[p] = struct{}{}
-		prompts = append(prompts, p)
 	}
 
-	if rounds != 0 && len(promptMap) != rounds {
-		return nil, cher.New("duplicates_generated", nil)
+	prompts := []string{}
+
+	for p := range promptMap {
+		prompts = append(prompts, p)
 	}
 
 	return prompts, nil
