@@ -40,8 +40,8 @@ var CreateGameSchema = gojsonschema.NewStringLoader(`{
 			"properties": {
 				"rounds": {
 					"type": "integer",
-					"minimum": 5,
-					"maximum": 60
+					"minimum": 10,
+					"maximum": 100
 				},
 
 				"include_random_spaces": {
