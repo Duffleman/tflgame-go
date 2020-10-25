@@ -182,7 +182,7 @@ type ExplainScoreRequest struct {
 type GetLeaderboardResponse struct {
 	Level   string        `json:"level"`
 	Color   string        `json:"color"`
-	Players []*PublicUser `json:"player"`
+	Players []*PublicUser `json:"players"`
 }
 
 type ListGameHistoryRequest struct {
