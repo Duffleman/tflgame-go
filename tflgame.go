@@ -177,3 +177,16 @@ type ExplainScoreRequest struct {
 	UserID string  `json:"user_id"`
 	GameID *string `json:"game_id"`
 }
+
+type GetLeaderboardResponse struct {
+	Level   string    `json:"level"`
+	Color   string    `json:"color"`
+	Players []*Player `json:"player"`
+}
+
+type Player struct {
+	ID      string `json:"id"`
+	Handle  string `json:"handle"`
+	Numeric string `json:"numeric"`
+	Score   int    `json:"score"`
+}

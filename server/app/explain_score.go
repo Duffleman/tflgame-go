@@ -9,7 +9,7 @@ import (
 
 func (a *App) ExplainScore(ctx context.Context, req *tflgame.ExplainScoreRequest) (*tflgame.Calculations, error) {
 	if req.GameID == nil {
-		_, calc, err := a.CalculateUserScore(ctx, req.UserID)
+		_, calc, err := a.CalculateUserScore(ctx, nil, req.UserID)
 		if err != nil {
 			return nil, err
 		}

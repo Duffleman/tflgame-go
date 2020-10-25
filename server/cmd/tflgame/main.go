@@ -69,6 +69,7 @@ func main() {
 	r.Route("/get_hint", r.GetHint, rpc.GetHintSchema, rpc.JWTAuth)
 	r.Route("/get_game_state", r.GetGameState, rpc.GetGameStateSchema, rpc.JWTAuth)
 	r.Route("/explain_score", r.ExplainScore, rpc.ExplainScoreSchema, rpc.JWTAuth)
+	r.Route("/get_leaderboard", r.GetLeaderboard, nil, rpc.UnsafeNoAuth)
 
 	addr := config.GetEnv("addr").(string)
 	r.Serve(addr)

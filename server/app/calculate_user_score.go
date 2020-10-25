@@ -6,13 +6,18 @@ import (
 	"math"
 
 	"tflgame"
+	"tflgame/server/db"
 	"tflgame/server/lib/ptr"
 )
 
-func (a *App) CalculateUserScore(ctx context.Context, userID string) (int, *tflgame.Calculations, error) {
+func (a *App) CalculateUserScore(ctx context.Context, qw *db.QueryableWrapper, userID string) (int, *tflgame.Calculations, error) {
+	if qw == nil {
+		qw = a.db.Q
+	}
+
 	c := &tflgame.Calculations{}
 
-	games, err := a.db.Q.ListAllGames(ctx, userID, true)
+	games, err := qw.ListAllGames(ctx, userID, true)
 	if err != nil {
 		return 0, nil, err
 	}
@@ -20,25 +25,22 @@ func (a *App) CalculateUserScore(ctx context.Context, userID string) (int, *tflg
 	var score float64 = start
 
 	c.Start = score
+
 	c.Add(tflgame.CalculationEvent{
 		Note:  "Start",
 		Score: score,
 	})
 
-	var totalGameScore float64 = 0
-
 	for _, g := range games {
-		totalGameScore += float64(g.Score)
+		score += float64(g.Score)
 
 		c.Add(tflgame.CalculationEvent{
 			Item:   &tflgame.CalculationItem{ID: g.ID, Type: "game"},
 			Note:   "Game won",
 			Effect: ptr.String(fmt.Sprintf("%d", g.Score)),
-			Score:  totalGameScore,
+			Score:  score,
 		})
 	}
-
-	score = totalGameScore
 
 	c.Base = score
 
@@ -47,13 +49,19 @@ func (a *App) CalculateUserScore(ctx context.Context, userID string) (int, *tflg
 		Score: score,
 	})
 
-	score = score / float64(len(games))
+	gamesLength := 1
+
+	if len(games) > 0 {
+		gamesLength = len(games)
+	}
+
+	score = score / float64(gamesLength)
 
 	c.End = score
 
 	c.Add(tflgame.CalculationEvent{
 		Note:   "Game score averaged",
-		Effect: ptr.String(fmt.Sprintf("/%d", len(games))),
+		Effect: ptr.String(fmt.Sprintf("/%d", gamesLength)),
 		Score:  score,
 	})
 

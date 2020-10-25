@@ -11,9 +11,9 @@ import (
 )
 
 // FinishGame ends a game. You **must** run this within a transaction.
-func (qw *QueryableWrapper) FinishGame(ctx context.Context, userID, gameID string, score int) error {
+func (qw *QueryableWrapper) FinishGame(ctx context.Context, userID, gameID string, score int, gameEndTime time.Time) error {
 	eventID := ksuid.Generate("event").String()
-	now := time.Now()
+	now := gameEndTime
 
 	payloadBytes, err := json.Marshal(&tflgame.FinishGamePayload{
 		Score: score,

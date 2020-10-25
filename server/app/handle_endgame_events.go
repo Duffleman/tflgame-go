@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"time"
 
 	"tflgame/server/db"
 )
@@ -20,9 +21,15 @@ func (a *App) HandleEndgameEvents(ctx context.Context, can context.CancelFunc, g
 			return err
 		}
 
+		var gameEndTime time.Time
+
 		for _, p := range prompts {
 			if p.AnsweredAt == nil {
 				return nil
+			}
+
+			if gameEndTime.Before(*p.AnsweredAt) {
+				gameEndTime = *p.AnsweredAt
 			}
 		}
 
@@ -33,7 +40,7 @@ func (a *App) HandleEndgameEvents(ctx context.Context, can context.CancelFunc, g
 
 		switch true {
 		case game.FinishedAt == nil:
-			err := qw.FinishGame(ctx, game.UserID, gameID, gameScore)
+			err := qw.FinishGame(ctx, game.UserID, gameID, gameScore, gameEndTime)
 			if err != nil {
 				return err
 			}
@@ -50,13 +57,16 @@ func (a *App) HandleEndgameEvents(ctx context.Context, can context.CancelFunc, g
 			return err
 		}
 
-		userScore, _, err := a.CalculateUserScore(ctx, game.UserID)
+		userScore, _, err := a.CalculateUserScore(ctx, qw, game.UserID)
 		if err != nil {
 			return err
 		}
 
 		if user.Score != userScore {
-			qw.RecalculateUserScore(ctx, user.ID, userScore)
+			err = qw.RecalculateUserScore(ctx, user.ID, userScore)
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil

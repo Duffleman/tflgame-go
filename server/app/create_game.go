@@ -8,6 +8,11 @@ import (
 )
 
 func (a *App) CreateGame(ctx context.Context, req *tflgame.CreateGameRequest) (*tflgame.CreateGameResponse, error) {
+	_, err := a.GetUserByID(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+
 	promptsStr, err := a.db.Q.GetPossiblePrompts(ctx, &req.GameOptions, req.DifficultyOptions.Rounds)
 	if err != nil {
 		return nil, err
