@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"time"
 
+	"tflgame"
+
 	sq "github.com/Masterminds/squirrel"
 	ksuid "github.com/cuvva/ksuid-go"
 )
@@ -25,10 +27,10 @@ func (d *DB) ChangeHandle(ctx context.Context, userID, handle string) (string, e
 
 		eventID := ksuid.Generate("event").String()
 
-		payloadBytes, err := json.Marshal(map[string]interface{}{
-			"user_id":     userID,
-			"new_handle":  handle,
-			"new_numeric": numeric,
+		payloadBytes, err := json.Marshal(tflgame.ChangeHandlePayload{
+			UserID:     userID,
+			NewHandle:  handle,
+			NewNumeric: numeric,
 		})
 		if err != nil {
 			return err

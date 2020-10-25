@@ -2,8 +2,9 @@ package tflgame
 
 import (
 	"encoding/json"
-	"errors"
 	"time"
+
+	"tflgame/server/lib/cher"
 )
 
 type Event struct {
@@ -39,6 +40,37 @@ type ReleaseHandlePayload struct {
 	Numeric string `json:"numeric"`
 }
 
+type CreateGamePayload struct {
+	CreationID        string            `json:"creation_id"`
+	Prompts           []Prompt          `json:"prompts"`
+	DifficultyOptions DifficultyOptions `json:"difficulty_options"`
+	GameOptions       GameOptions       `json:"game_options"`
+}
+
+type AnswerPromptPayload struct {
+	PromptID    string `json:"prompt_id"`
+	AnswerGiven string `json:"answer_given"`
+	Correct     bool   `json:"correct"`
+}
+
+type GiveHintPayload struct {
+	PromptID  string   `json:"prompt_id"`
+	NewPrompt string   `json:"new_prompt"`
+	Lines     []string `json:"lines"`
+}
+
+type FinishGamePayload struct {
+	Score int `json:"score"`
+}
+
+type RecalculateGameScorePayload struct {
+	Score int `json:"score"`
+}
+
+type RecalculateUserScorePayload struct {
+	Score int `json:"score"`
+}
+
 func PayloadHandler(eventType string, raw []byte, in *interface{}) error {
 	switch eventType {
 	case "create_user":
@@ -69,8 +101,52 @@ func PayloadHandler(eventType string, raw []byte, in *interface{}) error {
 		}
 
 		*in = payload
+	case "create_game":
+		var payload CreateGamePayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
+	case "finish_game":
+		var payload FinishGamePayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
+	case "recalculate_game_score":
+		var payload RecalculateGameScorePayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
+	case "recalculate_user_score":
+		var payload RecalculateUserScorePayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
+	case "answer_prompt":
+		var payload AnswerPromptPayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
+	case "give_hint":
+		var payload GiveHintPayload
+		if err := json.Unmarshal(raw, &payload); err != nil {
+			return err
+		}
+
+		*in = payload
 	default:
-		return errors.New("unknown event type")
+		return cher.New("unknown_event_type", cher.M{
+			"event_type": eventType,
+		})
 	}
 
 	return nil

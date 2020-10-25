@@ -5,7 +5,7 @@ CREATE TABLE events (
     type text NOT NULL,
     user_id text NOT NULL,
     game_id text,
-    payload jsonb NOT NULL,
+    payload jsonb,
     created_at timestamp without time zone NOT NULL
 );
 
@@ -31,14 +31,20 @@ CREATE UNIQUE INDEX proj_users_handle_numeric_idx ON proj_users (handle text_ops
 CREATE TABLE proj_games (
     id text PRIMARY KEY,
     user_id text NOT NULL REFERENCES proj_users (id),
-    difficulty_options jsonb NOT NULL,
-    game_options jsonb NOT NULL,
+    rounds int NOT NULL,
+    include_random_spaces boolean NOT NULL,
+    change_letter_order boolean NOT NULL,
+    reveal_word_length boolean NOT NULL,
+    lines jsonb,
+    zones jsonb,
     score integer NOT NULL DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     finished_at timestamp without time zone
 );
 
 CREATE INDEX proj_games_user_id_idx ON proj_games (user_id text_ops);
+
+CREATE INDEX events_type_game_id_idx ON events (TYPE text_ops, game_id text_ops);
 
 
 /* prompts */
@@ -47,10 +53,12 @@ CREATE TABLE proj_prompts (
     user_id text NOT NULL REFERENCES proj_users (id),
     game_id text NOT NULL REFERENCES proj_games (id),
     prompt text NOT NULL,
-    answer text,
+    answer text NOT NULL,
+    answer_given text,
     correct boolean NOT NULL DEFAULT FALSE,
     created_at timestamp without time zone NOT NULL,
-    answered_at timestamp without time zone
+    answered_at timestamp without time zone,
+    hint_given_at timestamp without time zone
 );
 
 CREATE INDEX proj_prompts_user_id_idx ON proj_prompts (user_id text_ops);
@@ -86,6 +94,15 @@ CREATE TABLE tfl_stops (
     lat double precision NOT NULL,
     lon double precision NOT NULL
 );
+
+
+/* tfl_stops_zones */
+CREATE TABLE tfl_stops_zones (
+    stop_id text NOT NULL REFERENCES tfl_stops (id),
+    zone text NOT NULL
+);
+
+CREATE UNIQUE INDEX tfl_stops_zones_stop_id_zone_idx ON tfl_stops_zones (stop_id text_ops, zone text_ops);
 
 
 /* tfl_lines_stops */

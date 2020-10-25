@@ -200,6 +200,12 @@ This document lays out the database information for the game and it's format
 		<tr>
 			<td>answer</td>
 			<td>text</td>
+			<td>false</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>answer_given</td>
+			<td>text</td>
 			<td>true</td>
 			<td></td>
 		</tr>
@@ -217,6 +223,12 @@ This document lays out the database information for the game and it's format
 		</tr>
 		<tr>
 			<td>answered_at</td>
+			<td>datetime</td>
+			<td>true</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>hint_given_at</td>
 			<td>datetime</td>
 			<td>true</td>
 			<td></td>

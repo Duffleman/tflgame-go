@@ -37,9 +37,9 @@ This option will mean that when you're given prompts, you're also told how long 
 
 ## API
 
-### `create_user`
+### `create_user`
 
-#### Request
+#### Request
 
 ```json
 {
@@ -59,9 +59,9 @@ This option will mean that when you're given prompts, you're also told how long 
 }
 ```
 
-### `authenticate`
+### `authenticate`
 
-#### Request
+#### Request
 
 ```json
 {
@@ -125,7 +125,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 }
 ```
 
-### `list_events`
+### `list_events`
 
 #### Request
 
@@ -170,42 +170,73 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 ]
 ```
 
-### `create_game`
+### `test_game_options`
 
 #### Request
 
 ```json
 {
+	"lines": [
+		"district",
+		"hammersmith-city",
+		"london-overground",
+		"dlr"
+	],
+	"zones": [
+		"2",
+		"3",
+		"5"
+	]
+}
+```
+
+#### Response
+
+```json
+{
+	"possible_prompts": 41
+}
+```
+
+### `create_game`
+
+#### Request
+
+```js
+{
 	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
 	"difficulty_options": {
 		"rounds": 5,
-		"include_random_spaces": true, // WHITECHAPEL => WH TCH PL
-		"change_letter_order": true, // WHITECHAPEL => PLWTHHC
-		"reveal_word_length": false, // OVAL =>VL (4)
+		"include_random_spaces": true,
+		"change_letter_order": true,
+		"reveal_word_length": false,
 	},
 	"game_options": {
 		"lines": [
 			"district",
-			"bakerloo",
-			"circle"
+			"waterloo-city",
+			...more
 		],
-		"bus_stops": false,
-		"overground": true
+		"zones": [
+			"1",
+			"4",
+			"6",
+			...more
+		]
 	}
 }
 ```
-
-If the user tag is not protected, `pin` must be present but can be `null`. Otherwise it is a `string`.
-
-Rounds must be no less than 5, no more than 30.
 
 #### Response
 
 ```json
 {
 	"id": "game_000000C0HbJWhvF4jnfFcEulxhsaG",
-	"prompt": "W HTC HP L",
-	"length": 11
+	"next": {
+		"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tr",
+		"prompt": "W HTC HP L",
+		"length": 11
+	}
 }
 ```
 
@@ -217,7 +248,7 @@ Rounds must be no less than 5, no more than 30.
 
 ```json
 {
-	"id": "game_000000C0HbJWhvF4jnfFcEulxhsaG",
+	"prompt_id": "prompt_000000C0HbJWhvF4jnfFcEulxhsaG",
 	"answer": "whitechapel"
 }
 ```
@@ -226,20 +257,24 @@ Rounds must be no less than 5, no more than 30.
 
 ```json
 {
-	"id": "game_000000C0HbJWhvF4jnfFcEulxhsaG",
-	"prompt": "BR KNG"
+	"correct": true,
+	"answer": "WHITECHAPEL",
+	"next": {
+		"prompt_id": "prompt_000000C0HbJWhvF4jnfFcEulxhsaG",
+		"prompt": "BR KNG"
+	}
 }
 ```
 
 `prompt` will be `null` if the round count has matched. Use `get_game_state` to see the final scores.
 
-### `get_game_state`
+### `get_current_game`
 
 #### Request
 
 ```json
 {
-	"id": "game_000000C0HbJWhvF4jnfFcEulxhsaG"
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN"
 }
 ```
 
@@ -247,6 +282,50 @@ Rounds must be no less than 5, no more than 30.
 
 ```json
 {
+	"game_id": "game_000000C0HbJWhvF4jnfFcEulxhsaG",
+	"next": {
+		"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tp",
+		"prompt": "VL",
+		"length": 4
+	}
+}
+```
+
+### `get_hint`
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tp"
+}
+```
+
+#### Response
+
+```json
+{
+	"lines": ["central", "waterloo-city"]
+}
+```
+
+### `get_game_state`
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"game_id": "game_000000C0HbJWhvF4jnfFcEulxhsaG"
+}
+```
+
+#### Response
+
+```json
+{
+	"in_progress": false,
 	"score": 18,
 	"game_time": "P14M25S",
 	"difficulty_options": {
@@ -267,58 +346,55 @@ Rounds must be no less than 5, no more than 30.
 }
 ```
 
-### `get_game_options`
+### `explain_score`
+
+#### Request
+
+```json
+{
+	"user_id": "user_000000C0KhWzlS5SMpISfDx5IF3aN",
+	"game_id": "game_000000C0HbJWhvF4jnfFcEulxhsaG"
+}
+```
+
+`game_id` is nullable, if so the user score is provided.
 
 #### Response
 
 ```json
 {
-	"lines": [
+	"start": 0,
+	"base": 2,
+	"end": 2,
+	"final": 2,
+	"events": [
 		{
-			"name": "bakerloo",
-			"color": "#00adD2d"
-		},
-		{
-			"name": "district",
-			"color": "#00adD2d"
-		},
-		{
-			"name": "circle",
-			"color": "#00adD2d"
-		}
-	],
-	"options": [
-		{
-			"key": "bus_stops",
-			"type": "boolean",
-			"description": "Should we include bus stops?"
-		},
-		{
-			"key": "overground",
-			"type": "boolean",
-			"description": "Should we include the London overground?"
+			"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tp",
+			"effect": "+2",
+			"score": 2,
+			"note": "Answered & correct"
 		}
 	]
 }
 ```
 
-### `list_leaderboard`
+### `get_leaderboard`
 
 #### Response
 
 ```json
-[
-	{
-		"handle": "DFL",
-		"numeric": "001",
-		"game_in_progress": false,
-		"score": 52,
-		"level": {
-			"name": "Bronze",
-			"color": "#002234"
+{
+	"level": "Bronze",
+	"color": "#002002",
+	"players": [
+		{
+			"user_id": "user_000000C0hr6WoXiCOAUWI9NJrF0E9",
+			"handle": "DFL",
+			"numeric": "001",
+			"score": 52
 		}
-	}
-]
+	]
+}
 ```
 
 ### `get_game_history`
@@ -327,9 +403,7 @@ Rounds must be no less than 5, no more than 30.
 
 ```json
 {
-	"handle": "DFL",
-	"numeric": "001",
-	"limit": 10
+	"user_id": "user_000000C0hsG8dDlvxfRVKxjtbUwaY",
 }
 ```
 
@@ -338,23 +412,12 @@ Rounds must be no less than 5, no more than 30.
 ```json
 [
 	{
-		"score": 18,
-		"game_time": "P1H25S",
-		"difficulty_options": {
-			"rounds": 20,
-			"include_random_spaces": true,
-			"change_letter_order": true,
-			"reveal_word_length": false,
-		},
-		"game_options": {
-			"lines": [
-				"district",
-				"bakerloo",
-				"circle"
-			],
-			"bus_stops": false,
-			"overground": true
-		}
+		"game_id": "game_000000C0h8airLlRVMBiATkuj2c3I",
+		"score": 23
+	},
+	{
+		"game_id": "game_000000C0h8airLlRVMBiATkuj2c3K",
+		"score": 12
 	}
 ]
 ```

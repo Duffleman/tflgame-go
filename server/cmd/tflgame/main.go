@@ -56,9 +56,21 @@ func main() {
 	r.Route("/release_handle", r.ReleaseHandle, rpc.ReleaseHandleSchema, rpc.JWTAuth)
 	r.Route("/change_pin", r.ChangePin, rpc.ChangePinSchema, rpc.JWTAuth)
 	r.Route("/list_events", r.ListEvents, rpc.ListEventsSchema, rpc.JWTAuth)
+	r.Route("/list_game_history", r.ListGameHistory, rpc.ListGameHistorySchema, rpc.JWTAuth)
 
 	// server endpoints
 	r.Route("/sync_tfl_data", r.SyncTFLData, nil, rpc.InternalOnlyAuth)
+
+	// game endpoints
+	r.Route("/test_game_options", r.TestGameOptions, rpc.TestGameOptionsSchema, rpc.UnsafeNoAuth)
+	r.Route("/get_game_options", r.GetGameOptions, nil, rpc.UnsafeNoAuth)
+	r.Route("/create_game", r.CreateGame, rpc.CreateGameSchema, rpc.JWTAuth)
+	r.Route("/submit_answer", r.SubmitAnswer, rpc.SubmitAnswerSchema, rpc.JWTAuth)
+	r.Route("/get_current_game", r.GetCurrentGame, rpc.GetCurrentGameSchema, rpc.JWTAuth)
+	r.Route("/get_hint", r.GetHint, rpc.GetHintSchema, rpc.JWTAuth)
+	r.Route("/get_game_state", r.GetGameState, rpc.GetGameStateSchema, rpc.JWTAuth)
+	r.Route("/explain_score", r.ExplainScore, rpc.ExplainScoreSchema, rpc.JWTAuth)
+	r.Route("/get_leaderboard", r.GetLeaderboard, nil, rpc.UnsafeNoAuth)
 
 	addr := config.GetEnv("addr").(string)
 	r.Serve(addr)

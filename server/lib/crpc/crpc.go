@@ -117,6 +117,7 @@ func Wrap(fn interface{}) (*WrappedFunc, error) {
 		if len(res) == 1 {
 			w.WriteHeader(http.StatusNoContent)
 		} else if len(res) == 2 {
+			w.Header().Add("Content-Type", "application/json; charset=utf-8")
 			enc := json.NewEncoder(w)
 			enc.SetEscapeHTML(false)
 			err := enc.Encode(res[0].Interface())

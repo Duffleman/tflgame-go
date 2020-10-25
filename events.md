@@ -18,8 +18,11 @@
 			"bakerloo",
 			"circle"
 		],
-		"bus_stops": false,
-		"overground": true
+		"zones": [
+			"1",
+			"2",
+			"5"
+		]
 	}
 }
 ```
@@ -40,8 +43,9 @@
 {
 	"game_id": "game_000000C0HbJWhvF4jnfFcEulxhsaH",
 	"user_id": "user_000000C0HjBIFIIxIKLTiSVviqtpE",
-	"answer": "WHITECHAPEL",
-	"correct": true
+	"answer_given": "WHITECHAPEL",
+	"correct": true,
+	"answered_at": "2020-01-01T00:00:00Z"
 }
 ```
 
@@ -82,5 +86,26 @@
 	"user_id": "user_000000C0HjBIFIIxIKLTiSVviqtpE",
 	"handle": "DFL",
 	"numeric": "001"
+}
+```
+
+## `finish_game`
+
+```json
+{
+	"user_id": "user_000000C0HjBIFIIxIKLTiSVviqtpE",
+	"game_id": "game_000000C0HbJWhvF4jnfFcEulxhsaH"
+}
+```
+
+## `give_hint`
+
+```json
+{
+	"prompt_id": "prompt_000000C0SgBJcmd3VoyUXFmRdW9tq",
+	"new_prompt": "FNSBRY PRK",
+	"lines": [
+		"district"
+	]
 }
 ```
