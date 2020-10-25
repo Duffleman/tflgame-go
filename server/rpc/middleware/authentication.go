@@ -48,7 +48,7 @@ func AuthenticateJWT(next http.HandlerFunc, publicKey *ecdsa.PublicKey) http.Han
 	})
 }
 
-func AuthenticateInternalKey(next http.HandlerFunc, internalKey string) http.HandlerFunc {
+func AuthenticateInternalKey(next http.HandlerFunc, internalKeys []string) http.HandlerFunc {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		tokenString := req.Header.Get("Authorization")
 
@@ -57,7 +57,13 @@ func AuthenticateInternalKey(next http.HandlerFunc, internalKey string) http.Han
 			return
 		}
 
-		if tokenString != internalKey {
+		keys := map[string]struct{}{}
+
+		for _, k := range internalKeys {
+			keys[k] = struct{}{}
+		}
+
+		if _, ok := keys[tokenString]; !ok {
 			httperr.HandleError(res, cher.New(cher.Unauthorized, nil, cher.New("wrong_key", nil)))
 			return
 		}
