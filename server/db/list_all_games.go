@@ -25,6 +25,8 @@ func (qw *QueryableWrapper) ListAllGames(ctx context.Context, userID string, onl
 		})
 	}
 
+	qb = qb.OrderBy("g.created_at DESC")
+
 	query, values, err := qb.ToSql()
 	if err != nil {
 		return nil, err
