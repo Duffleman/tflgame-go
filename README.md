@@ -397,7 +397,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 }
 ```
 
-### `get_game_history`
+### `list_game_history`
 
 #### Request
 

@@ -6,6 +6,7 @@ import (
 
 	"tflgame/server/app"
 	"tflgame/server/lib/cher"
+	"tflgame/server/lib/config"
 	"tflgame/server/lib/crpc"
 	"tflgame/server/lib/httperr"
 	"tflgame/server/rpc/middleware"
@@ -24,26 +25,55 @@ const (
 type AuthType int
 
 type RPC struct {
-	app         *app.App
-	router      *chi.Mux
-	internalKey string
-	Logger      *logrus.Logger
+	app          *app.App
+	internalKeys []string
+	Logger       *logrus.Logger
+
+	httpServer *http.Server
 }
 
-func New(app *app.App, l *logrus.Logger, internalKey string) *RPC {
+func New(app *app.App, l *logrus.Logger, internalKeys []string) *RPC {
 	r := &RPC{
-		app:         app,
-		Logger:      l,
-		internalKey: internalKey,
-		router:      chi.NewRouter(),
+		app:          app,
+		Logger:       l,
+		internalKeys: internalKeys,
 	}
 
-	r.SetMuxBase()
+	mux := chi.NewRouter()
+
+	mux.NotFound(func(res http.ResponseWriter, req *http.Request) {
+		httperr.HandleError(res, cher.New(cher.RouteNotFound, nil))
+		return
+	})
+
+	mux.Post(r.route("/authenticate", r.Authenticate, AuthenticateSchema, UnsafeNoAuth))
+	mux.Post(r.route("/create_user", r.CreateUser, CreateUserSchema, UnsafeNoAuth))
+	mux.Post(r.route("/change_handle", r.ChangeHandle, ChangeHandleSchema, JWTAuth))
+	mux.Post(r.route("/release_handle", r.ReleaseHandle, ReleaseHandleSchema, JWTAuth))
+	mux.Post(r.route("/change_pin", r.ChangePin, ChangePinSchema, JWTAuth))
+	mux.Post(r.route("/list_events", r.ListEvents, ListEventsSchema, JWTAuth))
+	mux.Post(r.route("/list_game_history", r.ListGameHistory, ListGameHistorySchema, JWTAuth))
+
+	// server endpoints
+	mux.Post(r.route("/sync_tfl_data", r.SyncTFLData, nil, InternalOnlyAuth))
+
+	// game endpoints
+	mux.Post(r.route("/test_game_options", r.TestGameOptions, TestGameOptionsSchema, UnsafeNoAuth))
+	mux.Post(r.route("/get_game_options", r.GetGameOptions, nil, UnsafeNoAuth))
+	mux.Post(r.route("/create_game", r.CreateGame, CreateGameSchema, JWTAuth))
+	mux.Post(r.route("/submit_answer", r.SubmitAnswer, SubmitAnswerSchema, JWTAuth))
+	mux.Post(r.route("/get_current_game", r.GetCurrentGame, GetCurrentGameSchema, JWTAuth))
+	mux.Post(r.route("/get_hint", r.GetHint, GetHintSchema, JWTAuth))
+	mux.Post(r.route("/get_game_state", r.GetGameState, GetGameStateSchema, JWTAuth))
+	mux.Post(r.route("/explain_score", r.ExplainScore, ExplainScoreSchema, JWTAuth))
+	mux.Post(r.route("/get_leaderboard", r.GetLeaderboard, nil, UnsafeNoAuth))
+
+	r.httpServer = &http.Server{Handler: mux}
 
 	return r
 }
 
-func (r *RPC) Route(pattern string, fnR interface{}, schema gojsonschema.JSONLoader, authRequirement AuthType) {
+func (r RPC) route(pattern string, fnR interface{}, schema gojsonschema.JSONLoader, authRequirement AuthType) (string, http.HandlerFunc) {
 	fn := crpc.MustWrap(fnR)
 	hasSchema := schema != nil
 
@@ -69,23 +99,19 @@ func (r *RPC) Route(pattern string, fnR interface{}, schema gojsonschema.JSONLoa
 	switch authRequirement {
 	case UnsafeNoAuth:
 	case InternalOnlyAuth:
-		handler = middleware.AuthenticateInternalKey(handler, r.internalKey)
+		handler = middleware.AuthenticateInternalKey(handler, r.internalKeys)
 	case JWTAuth:
 		handler = middleware.AuthenticateJWT(handler, r.app.SigningKeys.GetPublicKey())
 	}
 
-	r.router.Post(pattern, handler)
+	return pattern, handler
 }
 
-func (r *RPC) SetMuxBase() {
-	r.router.NotFound(func(res http.ResponseWriter, req *http.Request) {
-		httperr.HandleError(res, cher.New(cher.RouteNotFound, nil))
-		return
-	})
-}
+func (r *RPC) Run(cfg config.Server) (err error) {
+	r.Logger.WithField("addr", cfg.Addr).Info("listening")
+	if err = cfg.ListenAndServe(r.httpServer); err != nil {
+		err = fmt.Errorf("server: %w", err)
+	}
 
-// Serve starts listening on the address for web traffic
-func (r *RPC) Serve(address string) {
-	r.Logger.Infof("starting web server on %s", address)
-	r.Logger.Fatal(http.ListenAndServe(address, r.router))
+	return
 }
