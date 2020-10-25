@@ -64,7 +64,7 @@ func (qw *QueryableWrapper) GetPossiblePrompts(ctx context.Context, options *tfl
 		prompts = append(prompts, p)
 	}
 
-	if len(prompts) != rounds {
+	if rounds != 0 && len(promptMap) != rounds {
 		return nil, cher.New("duplicates_generated", nil)
 	}
 
