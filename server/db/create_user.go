@@ -62,6 +62,7 @@ func (d *DB) CreateUser(ctx context.Context, handle string, hash []byte) (*tflga
 		user.Handle = handle
 		user.Numeric = numeric
 		user.UserID = userID
+		user.Score = 0
 
 		return nil
 	})

@@ -388,7 +388,7 @@ Although the `token` may look like a JWT... you should treat it as a string and 
 	"color": "#002002",
 	"players": [
 		{
-			"id": "user_000000C0hr6WoXiCOAUWI9NJrF0E9",
+			"user_id": "user_000000C0hr6WoXiCOAUWI9NJrF0E9",
 			"handle": "DFL",
 			"numeric": "001",
 			"score": 52

@@ -12,11 +12,11 @@ func (a *App) GetLeaderboard(ctx context.Context) (*tflgame.GetLeaderboardRespon
 		return nil, err
 	}
 
-	var players []*tflgame.Player
+	var players []*tflgame.PublicUser
 
 	for _, user := range users {
-		players = append(players, &tflgame.Player{
-			ID:      user.ID,
+		players = append(players, &tflgame.PublicUser{
+			UserID:  user.ID,
 			Handle:  user.Handle,
 			Numeric: user.Numeric,
 			Score:   user.Score,

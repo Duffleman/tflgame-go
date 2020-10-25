@@ -23,8 +23,9 @@ func (a *App) ChangeHandle(ctx context.Context, req *tflgame.ChangeHandleRequest
 	}
 
 	return &tflgame.PublicUser{
-		UserID:  req.UserID,
+		UserID:  user.ID,
 		Handle:  req.NewHandle,
 		Numeric: numeric,
+		Score:   user.Score,
 	}, nil
 }

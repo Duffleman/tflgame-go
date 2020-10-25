@@ -17,6 +17,7 @@ type PublicUser struct {
 	UserID  string `json:"user_id"`
 	Handle  string `json:"handle"`
 	Numeric string `json:"numeric"`
+	Score   int    `json:"score"`
 }
 
 type ListEventsRequest struct {
@@ -179,14 +180,16 @@ type ExplainScoreRequest struct {
 }
 
 type GetLeaderboardResponse struct {
-	Level   string    `json:"level"`
-	Color   string    `json:"color"`
-	Players []*Player `json:"player"`
+	Level   string        `json:"level"`
+	Color   string        `json:"color"`
+	Players []*PublicUser `json:"player"`
 }
 
-type Player struct {
-	ID      string `json:"id"`
-	Handle  string `json:"handle"`
-	Numeric string `json:"numeric"`
-	Score   int    `json:"score"`
+type ListGameHistoryRequest struct {
+	UserID string `json:"user_id"`
+}
+
+type GameLog struct {
+	GameID string `json:"game_id"`
+	Score  int    `json:"score"`
 }

@@ -56,6 +56,7 @@ func main() {
 	r.Route("/release_handle", r.ReleaseHandle, rpc.ReleaseHandleSchema, rpc.JWTAuth)
 	r.Route("/change_pin", r.ChangePin, rpc.ChangePinSchema, rpc.JWTAuth)
 	r.Route("/list_events", r.ListEvents, rpc.ListEventsSchema, rpc.JWTAuth)
+	r.Route("/list_game_history", r.ListGameHistory, rpc.ListGameHistorySchema, rpc.JWTAuth)
 
 	// server endpoints
 	r.Route("/sync_tfl_data", r.SyncTFLData, nil, rpc.InternalOnlyAuth)

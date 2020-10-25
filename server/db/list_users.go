@@ -4,13 +4,18 @@ import (
 	"context"
 
 	"tflgame"
+
+	sq "github.com/Masterminds/squirrel"
 )
 
 func (qw *QueryableWrapper) ListUsers(ctx context.Context) ([]*tflgame.User, error) {
 	query, values, err := NewQueryBuilder().
 		Select("id, handle, numeric, score, pin, created_at").
 		From("proj_users u").
-		OrderBy("score ASC").
+		Where(sq.Gt{
+			"score": 0,
+		}).
+		OrderBy("score DESC, handle ASC, numeric ASC").
 		ToSql()
 	if err != nil {
 		return nil, err
