@@ -7,7 +7,35 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/go-redis/redis"
 )
+
+// Redis configures a connection to a Redis database.
+type Redis struct {
+	URI string `json:"uri"`
+}
+
+// Options returns a configured redis.Options structure.
+func (r Redis) Options() (*redis.Options, error) {
+	return redis.ParseURL(r.URI)
+}
+
+// Connect returns a connected redis.Client instance.
+func (r Redis) Connect() (*redis.Client, error) {
+	opts, err := r.Options()
+	if err != nil {
+		return nil, err
+	}
+
+	client := redis.NewClient(opts)
+
+	if err := client.Ping().Err(); err != nil {
+		return nil, err
+	}
+
+	return client, nil
+}
 
 // DefaultGraceful is the graceful shutdown timeout applied when no
 // configuration value is given.

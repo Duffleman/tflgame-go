@@ -28,15 +28,17 @@ type RPC struct {
 	app          *app.App
 	internalKeys []string
 	Logger       *logrus.Logger
+	limiter      *Limiter
 
 	httpServer *http.Server
 }
 
-func New(app *app.App, l *logrus.Logger, internalKeys []string) *RPC {
+func New(app *app.App, l *logrus.Logger, internalKeys []string, rateLimit *Limiter) *RPC {
 	r := &RPC{
 		app:          app,
 		Logger:       l,
 		internalKeys: internalKeys,
+		limiter:      rateLimit,
 	}
 
 	mux := chi.NewRouter()
