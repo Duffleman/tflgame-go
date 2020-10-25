@@ -12,7 +12,7 @@ func (a *App) ListGameHistory(ctx context.Context, req *tflgame.ListGameHistoryR
 		return nil, err
 	}
 
-	var gameHistory []*tflgame.GameLog
+	gameHistory := []*tflgame.GameLog{}
 
 	for _, g := range games {
 		gameHistory = append(gameHistory, &tflgame.GameLog{
