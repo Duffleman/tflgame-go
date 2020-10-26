@@ -2,11 +2,14 @@ package server
 
 import (
 	"database/sql"
+	"fmt"
 	"io/ioutil"
+	"time"
 
 	"tflgame/server/app"
 	"tflgame/server/db"
 	"tflgame/server/lib/config"
+	"tflgame/server/lib/limiter"
 	"tflgame/server/lib/tfl"
 	"tflgame/server/rpc"
 
@@ -21,7 +24,8 @@ type Config struct {
 
 	InternalKeys []string `json:"internal_keys"`
 
-	PostgresURI string `json:"postgres_uri"`
+	PostgresURI string       `json:"postgres_uri"`
+	Limit       config.Redis `json:"limit"`
 
 	PrivateKeyFile string `json:"private_key_file"`
 	PublicKeyFile  string `json:"public_key_file"`
@@ -41,6 +45,9 @@ func DefaultConfig() Config {
 		InternalKeys: []string{"test"},
 
 		PostgresURI: "postgresql://postgres@localhost/tflgame?sslmode=disable",
+		Limit: config.Redis{
+			URI: "redis://localhost/1",
+		},
 
 		PrivateKeyFile: "./ec_private.pem",
 		PublicKeyFile:  "./ec_public.pem",
@@ -80,11 +87,23 @@ func Run(cfg Config) error {
 		panic(err)
 	}
 
+	rateRedis, err := cfg.Limit.Connect()
+	if err != nil {
+		return fmt.Errorf("redis: %w", err)
+	}
+
+	rateLimit := &rpc.Limiter{
+		IP: limiter.Tiered{
+			&limiter.Sliding{1 * time.Minute, 3, rateRedis, "tflgame/5min/ip"},
+			&limiter.Sliding{1 * time.Hour, 60, rateRedis, "tflgame/1hr/ip"},
+		},
+	}
+
 	tflClient := tfl.NewClient(cfg.TFLURL, cfg.TFLKey)
 
 	app := app.New(db, signingKey, tflClient, logger)
 
-	r := rpc.New(app, logger, cfg.InternalKeys)
+	r := rpc.New(app, logger, cfg.InternalKeys, rateLimit)
 
 	return r.Run(cfg.Server)
 }

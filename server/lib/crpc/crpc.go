@@ -75,7 +75,9 @@ func Wrap(fn interface{}) (*WrappedFunc, error) {
 	}
 
 	hn := func(w http.ResponseWriter, r *http.Request) {
-		ctx := reflect.ValueOf(r.Context())
+		baseCtx := setRequestContext(r.Context(), r)
+		ctx := reflect.ValueOf(baseCtx)
+
 		var inputs []reflect.Value
 
 		if reqT == nil {

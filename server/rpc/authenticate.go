@@ -2,7 +2,10 @@ package rpc
 
 import (
 	"context"
+
 	"tflgame"
+	"tflgame/server/lib/cher"
+	"tflgame/server/lib/crpc"
 
 	"github.com/xeipuuv/gojsonschema"
 )
@@ -38,6 +41,13 @@ var AuthenticateSchema = gojsonschema.NewStringLoader(`{
 func (r *RPC) Authenticate(ctx context.Context, req *tflgame.AuthenticateRequest) (*tflgame.AuthenticateResponse, error) {
 	// unauthenticated requests allowed
 
-	// TODO(gm): rate limit this
+	rc := crpc.GetRequestContext(ctx)
+	ip := stripPort(rc.RemoteAddr)
+
+	allowed := r.limiter.Allow(ip)
+	if !allowed {
+		return nil, cher.New(cher.TooManyRequests, nil)
+	}
+
 	return r.app.Authenticate(ctx, req)
 }
