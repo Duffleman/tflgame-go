@@ -3,7 +3,6 @@ package server
 import (
 	"database/sql"
 	"fmt"
-	"io/ioutil"
 	"time"
 
 	"tflgame/server/app"
@@ -27,8 +26,8 @@ type Config struct {
 	PostgresURI string       `json:"postgres_uri"`
 	Limit       config.Redis `json:"limit"`
 
-	PrivateKeyFile string `json:"private_key_file"`
-	PublicKeyFile  string `json:"public_key_file"`
+	PrivateKey string `json:"private_key"`
+	PublicKey  string `json:"public_key"`
 
 	TFLURL string `json:"tfl_url"`
 	TFLKey string `json:"tfl_key"`
@@ -49,8 +48,8 @@ func DefaultConfig() Config {
 			URI: "redis://localhost/1",
 		},
 
-		PrivateKeyFile: "./ec_private.pem",
-		PublicKeyFile:  "./ec_public.pem",
+		PrivateKey: "-----BEGIN EC PRIVATE KEY-----\nMHcCAQEEIATvKM7wNazPtLUWvJLwX06XCjwe5VKQvi+b6qd9v6JmoAoGCCqGSM49\nAwEHoUQDQgAEeNY4hNPKbvOurrmSW25dgYNbSn/Oa6NdLDd884awxKlzAdC+o5T0\np5LK4LZYbmSlKsb1a5kftBR4waloCoalug==\n-----END EC PRIVATE KEY-----",
+		PublicKey:  "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEeNY4hNPKbvOurrmSW25dgYNbSn/O\na6NdLDd884awxKlzAdC+o5T0p5LK4LZYbmSlKsb1a5kftBR4waloCoalug==\n-----END PUBLIC KEY-----",
 
 		TFLURL: "https://api.tfl.gov.uk",
 		TFLKey: "",
@@ -72,17 +71,7 @@ func Run(cfg Config) error {
 
 	db := db.New(pgDb)
 
-	privateKey, err := ioutil.ReadFile(cfg.PrivateKeyFile)
-	if err != nil {
-		return err
-	}
-
-	publicKey, err := ioutil.ReadFile(cfg.PublicKeyFile)
-	if err != nil {
-		return err
-	}
-
-	signingKey, err := config.NewSigningKey(privateKey, publicKey)
+	signingKey, err := config.NewSigningKey([]byte(cfg.PrivateKey), []byte(cfg.PublicKey))
 	if err != nil {
 		panic(err)
 	}
@@ -94,7 +83,7 @@ func Run(cfg Config) error {
 
 	rateLimit := &rpc.Limiter{
 		IP: limiter.Tiered{
-			&limiter.Sliding{1 * time.Minute, 3, rateRedis, "tflgame/5min/ip"},
+			&limiter.Sliding{1 * time.Minute, 3, rateRedis, "tflgame/1min/ip"},
 			&limiter.Sliding{1 * time.Hour, 60, rateRedis, "tflgame/1hr/ip"},
 		},
 	}
