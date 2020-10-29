@@ -4,6 +4,11 @@ This is the backend service that runs the TFLGame. A game where you are provided
 
 Any case where response is not defined in this document, you will get a 204 status code, it completed the requested action.
 
+## URLs
+
+- prod: `https://api.tflga.me`
+- local: `http://localhost:3000`
+
 ## Auth
 
 To generate the EC256 keys needed for JWT signing, use the following two commands.
