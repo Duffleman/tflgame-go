@@ -106,6 +106,8 @@ func (r RPC) route(pattern string, fnR interface{}, schema gojsonschema.JSONLoad
 		handler = middleware.AuthenticateJWT(handler, r.app.SigningKeys.GetPublicKey())
 	}
 
+	handler = middleware.AddCORSHeaders(handler)
+
 	return pattern, handler
 }
 
